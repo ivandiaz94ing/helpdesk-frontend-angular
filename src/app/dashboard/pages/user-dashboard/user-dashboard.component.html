@@ -1,0 +1,139 @@
+  <!-- El contenedor principal de toda la pantalla -->
+    <div class="min-h-screen bg-base-200">
+
+      <!-- BARRA DE NAVEGACIÓN (Navbar de DaisyUI) -->
+      <div class="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-4 sm:px-8">
+
+        <!-- Lado Izquierdo: Logo y Título -->
+        <div class="flex-1 gap-3">
+          <div class="avatar placeholder">
+            <div class="bg-primary text-primary-content rounded-lg w-10">
+              <span class="text-xl">🛠️</span>
+            </div>
+          </div>
+          <a class="text-xl font-bold">Mesa de Ayudas</a>
+        </div>
+
+        <!-- Lado Derecho: Usuario y Botón de Salir -->
+        <div class="flex-none gap-4">
+          <span class="hidden sm:inline font-medium text-base-content/80">
+            Hola, Usuario
+          </span>
+          <!-- Botón usando Boxicons para el ícono de salir -->
+          <button class="btn btn-ghost btn-circle text-error hover:bg-error/20" title="Cerrar
+  sesión">
+            <i class='bx bx-log-out text-2xl'></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- AQUÍ ABAJO IRÁ EL CONTENIDO PRINCIPAL (En el siguiente paso) -->
+      <main class="p-4 sm:p-8 max-w-7xl mx-auto">
+        <!-- Aquí pondremos los botones y la lista de tickets más adelante -->
+        <!-- ENCABEZADO DEL DASHBOARD -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-base-content">Tus Reportes</h1>
+        <p class="text-base-content/60 mt-1">Revisa el estado de tus solicitudes o crea una nueva.
+  </p>
+      </div>
+
+      <!-- Botón de crear (Abre un modal en el futuro) -->
+      <!-- <button class="btn btn-primary shadow-lg shadow-primary/30">
+        <i class='bx bx-plus text-xl'></i>
+        Nuevo Requerimiento
+      </button> -->
+          <button class="btn btn-primary shadow-lg shadow-primary/30" (click)="modalTicket.showModal()">
+            <i class='bx bx-plus text-xl'></i>
+            Nuevo Requerimiento
+          </button>
+    </div>
+
+    <!-- LISTA DE TICKETS SIMULADOS -->
+    <!-- Validamos si hay tickets -->
+    @if (ticketService.tickets().length === 0) {
+      <div class="flex flex-col items-center justify-center p-12 bg-base-100 rounded-2xl shadow-sm
+  border border-base-200 border-dashed">
+        <i class='bx bx-folder-open text-6xl text-base-content/20 mb-4'></i>
+        <h3 class="text-xl font-semibold">No tienes reportes activos</h3>
+        <p class="text-base-content/60">Cuando crees un requerimiento aparecerá aquí.</p>
+      </div>
+    } @else {
+      <!-- Grid para mostrar los tickets como tarjetas -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- El bucle recorre tu signal "tickets()" -->
+        @for (ticket of ticketService.tickets(); track ticket.id) {
+
+          <div class="card bg-base-100 shadow-sm hover:shadow-md transition-all border border-
+  base-200">
+            <div class="card-body p-6">
+
+              <!-- Encabezado de la tarjeta (ID y Estado) -->
+              <div class="flex justify-between items-start mb-2">
+                <span class="text-xs font-bold text-base-content/40">#REQ-00{{ ticket.id }}</span>
+
+                <!-- Cambiamos el color según el estado -->
+                <div class="badge font-medium"
+                     [class.badge-error]="ticket.status === 'Abierto'"
+                     [class.badge-warning]="ticket.status === 'En progreso'"
+                     [class.badge-success]="ticket.status === 'Cerrado'">
+                  {{ ticket.status }}
+                </div>
+              </div>
+
+              <!-- Título del problema -->
+              <h2 class="card-title text-lg mb-4">{{ ticket.issue }}</h2>
+
+              <!-- Botón de ver detalles -->
+              <div class="card-actions justify-end mt-auto">
+                <button class="btn btn-sm btn-outline btn-ghost">
+                  Ver Detalles
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        }
+
+      </div>
+    }
+      </main>
+
+    </div>
+        <!-- MODAL DE NUEVO REQUERIMIENTO -->
+    <!-- Le ponemos el nombre #modalTicket para que Angular lo reconozca -->
+    <dialog #modalTicket class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">Reportar Nuevo Problema</h3>
+
+        <!-- Input para escribir el problema -->
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-medium">Describe la incidencia</span>
+          </label>
+          <!-- Le ponemos #inputProblema para capturar lo que el usuario escriba aquí -->
+          <input #inputProblema type="text" placeholder="Ej. El computador no enciende..." class="input input-
+  bordered w-full focus:outline-primary" />
+        </div>
+
+        <div class="modal-action">
+          <!-- Botón para cerrar el modal -->
+          <form method="dialog">
+            <button class="btn btn-ghost mr-2">Cancelar</button>
+          </form>
+          <!-- Botón para Guardar -->
+          <button class="btn btn-primary" (click)="crearTicket(inputProblema.value); modalTicket.close();
+  inputProblema.value=''">
+            Enviar Reporte
+          </button>
+        </div>
+      </div>
+
+      <!-- Esto permite cerrar el modal si das clic en la sombra oscura -->
+      <form method="dialog" class="modal-backdrop">
+        <button>cerrar</button>
+      </form>
+    </dialog>
