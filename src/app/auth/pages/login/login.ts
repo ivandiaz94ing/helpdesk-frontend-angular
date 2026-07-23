@@ -16,6 +16,13 @@ export class Login {
   private router = inject(Router);
   private authService = inject(AuthService);
 
+  // constructor() {
+  //   // Si el usuario ya está autenticado, redirigirlo al dashboard
+  //   if (this.authService.autStatus() === 'authenticated') {
+  //     this.router.navigate(['/dashboard/app-user-dashboard']);
+  //   }
+  // }
+
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

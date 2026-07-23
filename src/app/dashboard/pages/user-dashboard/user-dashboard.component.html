@@ -16,11 +16,21 @@
 
         <!-- Lado Derecho: Usuario y Botón de Salir -->
         <div class="flex-none gap-4">
-          <span class="hidden sm:inline font-medium text-base-content/80">
+          @if(authService.autStatus()==='authenticated') {
+            <span class="hidden sm:inline font-medium text-base-content/80">
+              {{ authService.user()?.fullname }}
+            </span>
+          }
+          <!-- } @else {
+            <span class="hidden sm:inline font-medium text-base-content/80">
+              Invitado
+            </span>
+          } -->
+          <!-- <span class="hidden sm:inline font-medium text-base-content/80">
             Hola, Usuario
-          </span>
+          </span> -->
           <!-- Botón usando Boxicons para el ícono de salir -->
-          <button class="btn btn-ghost btn-circle text-error hover:bg-error/20" title="Cerrar
+          <button (click)="authService.logout()" class="btn btn-ghost btn-circle text-error hover:bg-error/20" title="Cerrar
   sesión">
             <i class='bx bx-log-out text-2xl'></i>
           </button>
@@ -44,10 +54,12 @@
         <i class='bx bx-plus text-xl'></i>
         Nuevo Requerimiento
       </button> -->
+          
           <button class="btn btn-primary shadow-lg shadow-primary/30" (click)="modalTicket.showModal()">
             <i class='bx bx-plus text-xl'></i>
             Nuevo Requerimiento
           </button>
+
     </div>
 
     <!-- LISTA DE TICKETS SIMULADOS -->
