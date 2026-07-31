@@ -3,6 +3,7 @@ import { AdminDashboardComponent } from "./pages/admin-dashboard/admin-dashboard
 import { UserDashboardComponent } from "./pages/user-dashboard/user-dashboard.component";
 
 export const dashboardRoutes: Routes = [
+
   {
     path: 'app-user-dashboard',
     component: UserDashboardComponent,
@@ -10,6 +11,11 @@ export const dashboardRoutes: Routes = [
   {
     path: 'app-admin-dashboard',
     component: AdminDashboardComponent,
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'app-user-dashboard'
   }
 ];
 

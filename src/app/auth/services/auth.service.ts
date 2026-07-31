@@ -7,7 +7,8 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
 type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
-const baseUrl = 'http://localhost:3000/';
+// const baseUrl = 'http://localhost:3000/';
+const baseUrl = 'https://helpdesk-backend-api-54750791481.southamerica-east1.run.app/';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private _authStatus = signal<AuthStatus>('checking');
