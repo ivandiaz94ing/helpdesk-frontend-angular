@@ -94,5 +94,17 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  //Register
+  // Register
+  register(fullname: string, email: string, password: string): Observable<boolean> {
+    return this.http
+      .post<AuthResponse>(`${baseUrl}user/register`, {
+        fullname: fullname,
+        email: email,
+        password: password,
+      })
+      .pipe(
+        map((resp) => this.handleAuthSuccess(resp)),
+        catchError((err: any) => this.handleAuthError(err)),
+      );
+  }
 }
