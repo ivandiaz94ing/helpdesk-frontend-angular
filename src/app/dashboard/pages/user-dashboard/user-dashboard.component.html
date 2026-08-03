@@ -1,151 +1,158 @@
-  <!-- El contenedor principal de toda la pantalla -->
-    <div class="min-h-screen bg-base-200">
-
-      <!-- BARRA DE NAVEGACIÓN (Navbar de DaisyUI) -->
-      <div class="navbar bg-base-100 shadow-sm sticky top-0 z-50 px-4 sm:px-8">
-
-        <!-- Lado Izquierdo: Logo y Título -->
-        <div class="flex-1 gap-3">
-          <div class="avatar placeholder">
-            <div class="bg-primary text-primary-content rounded-lg w-10">
-              <span class="text-xl">🛠️</span>
+<div class="flex h-screen bg-slate-100 overflow-hidden text-slate-800 font-sans">
+    
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <div id="menu" class="bg-gray-900 text-slate-300 w-64 fixed left-0 h-screen overflow-y-auto flex flex-col z-20 shadow-xl">
+        <!-- Marca / Logo -->
+        <div id="logo" class="my-6 px-6 flex items-center gap-3">
+            <div class="bg-primary text-primary-content rounded-xl w-10 h-10 flex items-center justify-center shadow-lg">
+                <span class="text-2xl">🛠️</span>
             </div>
-          </div>
-          <a class="text-xl font-bold">Mesa de Ayudas</a>
+            <div>
+                <h1 class="text-xl font-bold text-white tracking-tight">Mesa<span class="text-primary">Ayuda</span></h1>
+                <p class="text-slate-400 text-xs">Telemática Batallón</p>
+            </div>
         </div>
 
-        <!-- Lado Derecho: Usuario y Botón de Salir -->
-        <div class="flex-none gap-4">
-          @if(authService.autStatus()==='authenticated') {
-            <span class="hidden sm:inline font-medium text-base-content/80">
-              {{ authService.user()?.fullname }}
-            </span>
-          }
-          <!-- } @else {
-            <span class="hidden sm:inline font-medium text-base-content/80">
-              Invitado
-            </span>
-          } -->
-          <!-- <span class="hidden sm:inline font-medium text-base-content/80">
-            Hola, Usuario
-          </span> -->
-          <!-- Botón usando Boxicons para el ícono de salir -->
-          <button (click)="authService.logout()" class="btn btn-ghost btn-circle text-error hover:bg-error/20" title="Cerrar
-  sesión">
-            <i class='bx bx-log-out text-2xl'></i>
-          </button>
-        </div>
-
-      </div>
-
-      <!-- AQUÍ ABAJO IRÁ EL CONTENIDO PRINCIPAL (En el siguiente paso) -->
-      <main class="p-4 sm:p-8 max-w-7xl mx-auto">
-        <!-- Aquí pondremos los botones y la lista de tickets más adelante -->
-        <!-- ENCABEZADO DEL DASHBOARD -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-      <div>
-        <h1 class="text-3xl font-bold text-base-content">Tus Reportes</h1>
-        <p class="text-base-content/60 mt-1">Revisa el estado de tus solicitudes o crea una nueva.
-  </p>
-      </div>
-
-      <!-- Botón de crear (Abre un modal en el futuro) -->
-      <!-- <button class="btn btn-primary shadow-lg shadow-primary/30">
-        <i class='bx bx-plus text-xl'></i>
-        Nuevo Requerimiento
-      </button> -->
-          
-          <button class="btn btn-primary shadow-lg shadow-primary/30" (click)="modalTicket.showModal()">
-            <i class='bx bx-plus text-xl'></i>
-            Nuevo Requerimiento
-          </button>
-
-    </div>
-
-    <!-- LISTA DE TICKETS SIMULADOS -->
-    <!-- Validamos si hay tickets -->
-    @if (ticketService.tickets().length === 0) {
-      <div class="flex flex-col items-center justify-center p-12 bg-base-100 rounded-2xl shadow-sm
-  border border-base-200 border-dashed">
-        <i class='bx bx-folder-open text-6xl text-base-content/20 mb-4'></i>
-        <h3 class="text-xl font-semibold">No tienes reportes activos</h3>
-        <p class="text-base-content/60">Cuando crees un requerimiento aparecerá aquí.</p>
-      </div>
-    } @else {
-      <!-- Grid para mostrar los tickets como tarjetas -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- El bucle recorre tu signal "tickets()" -->
-        @for (ticket of ticketService.tickets(); track ticket.id) {
-
-          <div class="card bg-base-100 shadow-sm hover:shadow-md transition-all border border-
-  base-200">
-            <div class="card-body p-6">
-
-              <!-- Encabezado de la tarjeta (ID y Estado) -->
-              <div class="flex justify-between items-start mb-2">
-                <span class="text-xs font-bold text-base-content/40">#REQ-00{{ ticket.id }}</span>
-
-                <!-- Cambiamos el color según el estado -->
-                <div class="badge font-medium"
-                     [class.badge-error]="ticket.status === 'Abierto'"
-                     [class.badge-warning]="ticket.status === 'En progreso'"
-                     [class.badge-success]="ticket.status === 'Cerrado'">
-                  {{ ticket.status }}
+        <!-- Perfil de Usuario -->
+        <div id="profile" class="px-6 py-6 border-t border-slate-800 mt-2">
+            <p class="text-slate-500 text-xs uppercase font-bold tracking-wider mb-3">Funcionario</p>
+            <a href="#" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="avatar placeholder">
+                  <div class="bg-neutral text-neutral-content rounded-full w-10 h-10 flex items-center justify-center shadow-md">
+                    <span class="text-sm font-semibold">{{ userInitials() }}</span>
+                  </div>
                 </div>
-              </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-bold text-white leading-tight">{{ user()?.fullname || 'Usuario' }}</span>
+                    <span class="text-xs text-slate-400">Ver perfil</span>
+                </div>
+            </a>
+        </div>
 
-              <!-- Título del problema -->
-              <h2 class="card-title text-lg mb-4">{{ ticket.issue }}</h2>
+        <!-- Navegación -->
+        <div id="nav" class="w-full flex-1 px-4 mt-6 space-y-2">
+            <!-- Panel Principal (Mis Reportes) -->
+            <a routerLink="./" class="w-full px-4 py-3 rounded-xl flex items-center gap-3 bg-primary text-white shadow-md shadow-primary/30 hover:bg-primary/90 transition-all">
+                <i class='bx bx-receipt text-xl'></i>
+                <span class="text-sm font-bold">Mis Reportes</span>
+            </a>
+            
+            <!-- Notificaciones (Ejemplo) -->
+            <a href="#" class="w-full px-4 py-3 rounded-xl flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white transition-all">
+                <i class='bx bx-bell text-xl'></i>
+                <span class="text-sm font-bold">Notificaciones</span>
+            </a>
+        </div>
 
-              <!-- Botón de ver detalles -->
-              <div class="card-actions justify-end mt-auto">
-                <button class="btn btn-sm btn-outline btn-ghost">
-                  Ver Detalles
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-        }
-
-      </div>
-    }
-      </main>
-
+        <!-- Botón de Salida -->
+        <div class="px-4 py-6 border-t border-slate-800">
+            <button (click)="onLogout()" class="w-full px-4 py-3 rounded-xl flex items-center gap-3 text-error hover:bg-error/10 transition-all font-semibold">
+                <i class='bx bx-log-out text-xl'></i>
+                <span class="text-sm">Cerrar Sesión</span>
+            </button>
+        </div>
     </div>
-        <!-- MODAL DE NUEVO REQUERIMIENTO -->
-    <!-- Le ponemos el nombre #modalTicket para que Angular lo reconozca -->
-    <dialog #modalTicket class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg mb-4">Reportar Nuevo Problema</h3>
 
-        <!-- Input para escribir el problema -->
-        <div class="form-control w-full mb-4">
-          <label class="label">
-            <span class="label-text font-medium">Describe la incidencia</span>
-          </label>
-          <!-- Le ponemos #inputProblema para capturar lo que el usuario escriba aquí -->
-          <input #inputProblema type="text" placeholder="Ej. El computador no enciende..." class="input input-
-  bordered w-full focus:outline-primary" />
-        </div>
+    <!-- CONTENIDO PRINCIPAL (DERECHA) -->
+    <div class="ml-64 flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
+        
+        <!-- Cabecera Top (Header) -->
+        <header class="bg-white shadow-sm border-b border-slate-200 h-20 flex items-center justify-between px-10 z-10">
+            <h2 class="text-2xl font-bold text-slate-800">Panel de Usuario</h2>
+            <div class="flex items-center gap-4">
+                <div class="relative cursor-pointer hover:bg-slate-100 p-2 rounded-full transition-colors">
+                    <i class='bx bx-help-circle text-2xl text-slate-500'></i>
+                </div>
+            </div>
+        </header>
 
-        <div class="modal-action">
-          <!-- Botón para cerrar el modal -->
-          <form method="dialog">
-            <button class="btn btn-ghost mr-2">Cancelar</button>
-          </form>
-          <!-- Botón para Guardar -->
-          <button class="btn btn-primary" (click)="crearTicket(inputProblema.value); modalTicket.close();
-  inputProblema.value=''">
-            Enviar Reporte
-          </button>
-        </div>
-      </div>
+        <!-- Área Dinámica de Contenido -->
+        <main class="flex-1 overflow-y-auto p-10">
+            <div class="w-full max-w-7xl mx-auto">
+                
+                <!-- ENCABEZADO DE SECCIÓN -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                  <div>
+                    <h1 class="text-3xl font-bold text-slate-800">Tus Reportes</h1>
+                    <p class="text-slate-500 mt-1">Revisa el estado de tus solicitudes o crea una nueva incidencia.</p>
+                  </div>
+                  <!-- Botón de crear -->
+                  <button class="btn btn-primary shadow-lg shadow-primary/30 hover:-translate-y-0.5 transition-all" (click)="modalTicket.showModal()">
+                    <i class='bx bx-plus text-xl'></i>
+                    Nuevo Requerimiento
+                  </button>
+                </div>
 
-      <!-- Esto permite cerrar el modal si das clic en la sombra oscura -->
-      <form method="dialog" class="modal-backdrop">
-        <button>cerrar</button>
-      </form>
-    </dialog>
+                <!-- LISTA DE TICKETS -->
+                @if (ticketService.tickets().length === 0) {
+                  <!-- Empty State -->
+                  <div class="flex flex-col items-center justify-center p-16 bg-white rounded-2xl shadow-sm border border-slate-200 border-dashed mt-8">
+                    <div class="bg-slate-100 p-4 rounded-full mb-4">
+                        <i class='bx bx-folder-open text-5xl text-slate-400'></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-700">No tienes reportes activos</h3>
+                    <p class="text-slate-500 mt-2 max-w-sm text-center">Tus requerimientos y problemas tecnológicos aparecerán aquí una vez los reportes.</p>
+                    <button class="btn btn-outline btn-primary mt-6" (click)="modalTicket.showModal()">Crear el primero</button>
+                  </div>
+                } @else {
+                  <!-- Grid de Tarjetas -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    @for (ticket of ticketService.tickets(); track ticket.id) {
+                      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all flex flex-col group">
+                        
+                        <div class="flex justify-between items-start mb-4">
+                          <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md">#REQ-00{{ ticket.id }}</span>
+                          <div class="badge font-bold border-0 text-xs"
+                               [class.bg-error]="ticket.status === 'Abierto'"
+                               [class.text-error-content]="ticket.status === 'Abierto'"
+                               [class.bg-warning]="ticket.status === 'En progreso'"
+                               [class.text-warning-content]="ticket.status === 'En progreso'"
+                               [class.bg-success]="ticket.status === 'Cerrado'"
+                               [class.text-success-content]="ticket.status === 'Cerrado'">
+                            {{ ticket.status }}
+                          </div>
+                        </div>
+                        
+                        <h2 class="text-lg font-bold text-slate-700 mb-6 flex-1 group-hover:text-primary transition-colors line-clamp-3">{{ ticket.issue }}</h2>
+                        
+                        <div class="flex justify-end mt-auto pt-4 border-t border-slate-50">
+                          <button class="text-sm font-semibold text-primary/80 hover:text-primary transition-colors inline-flex items-center gap-1">
+                            Ver Detalles <i class='bx bx-right-arrow-alt text-lg'></i>
+                          </button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- MODAL DE NUEVO REQUERIMIENTO -->
+<dialog #modalTicket class="modal">
+  <div class="modal-box bg-white rounded-2xl shadow-2xl">
+    <div class="flex items-center justify-between mb-6">
+        <h3 class="font-bold text-xl text-slate-800">Reportar Incidencia</h3>
+        <button class="btn btn-sm btn-circle btn-ghost text-slate-400" (click)="modalTicket.close()"><i class='bx bx-x text-2xl'></i></button>
+    </div>
+    
+    <div class="form-control w-full mb-6">
+      <label class="label">
+        <span class="label-text font-semibold text-slate-600">Descripción detallada del problema</span>
+      </label>
+      <textarea #inputProblema placeholder="Ej. El equipo de escritorio no enciende tras el apagón de ayer..." class="textarea textarea-bordered bg-slate-50 w-full focus:outline-primary focus:bg-white transition-colors h-32 resize-none" ></textarea>
+    </div>
+
+    <div class="modal-action mt-2">
+      <button class="btn btn-ghost text-slate-500 font-semibold" (click)="modalTicket.close()">Cancelar</button>
+      <button class="btn btn-primary px-8 shadow-lg shadow-primary/30" (click)="crearTicket(inputProblema.value); modalTicket.close(); inputProblema.value=''">
+        Enviar Reporte
+      </button>
+    </div>
+  </div>
+  
+  <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
+    <button>cerrar</button>
+  </form>
+</dialog>
