@@ -1,0 +1,87 @@
+ <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+      <!-- Encabezado de la tabla -->
+             <!-- Encabezado de la tabla (Mejorado con más espacio) -->
+      <div class="p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-
+  start sm:items-center gap-4 bg-slate-50/50">
+
+        <!-- Título más corto y subtítulo -->
+        <div>
+          <h3 class="font-bold text-slate-800 text-xl">Incidencias</h3>
+          <p class="text-sm text-slate-500 mt-1">Gestiona los reportes de los usuarios</p>
+        </div>
+
+        <!-- Barra de búsqueda adaptable -->
+        <div class="join w-full sm:w-auto mt-2 sm:mt-0">
+          <!-- Le quité el "input-sm" para que quede de tamaño normal y agregué flex para que se
+  adapte -->
+          <input class="input input-bordered join-item w-full sm:w-64 focus:outline-primary"
+  placeholder="Buscar ticket..."/>
+          <button class="btn join-item bg-primary text-white hover:bg-primary/90 shadow-
+  sm">Buscar</button>
+        </div>
+
+      </div>
+
+
+      <!-- Contenedor de la Tabla -->
+      <div class="overflow-x-auto w-full">
+          <table class="table table-zebra w-full text-slate-600">
+          <!-- Títulos de las columnas -->
+          <thead class="text-slate-500 bg-slate-50/80 uppercase text-xs">
+            <tr>
+              <!-- Ocultamos el ID en móviles (hidden sm:table-cell) -->
+              <th class="hidden sm:table-cell">ID</th>
+              <th>Descripción del Problema</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (ticket of ticketService.tickets(); track ticket.id) {
+              <tr class="hover">
+                <!-- Ocultamos el ID en móviles -->
+                <td class="font-bold text-slate-400 hidden sm:table-cell">#REQ-00{{ ticket.id
+  }}</td>
+
+                <!-- Problema (Se acorta automáticamente si no cabe) -->
+                <td class="max-w-[150px] sm:max-w-md truncate font-medium text-slate-700">
+                  {{ ticket.description }}
+                </td>
+
+                <!-- Estado -->
+                <td>
+                  <div class="badge font-bold border-0 text-[10px] sm:text-xs"
+                       [class.bg-error]="ticket.status === 'abierto'"
+                       [class.text-error-content]="ticket.status === 'abierto'"
+                       [class.bg-warning]="ticket.status === 'en_progreso'"
+                       [class.text-warning-content]="ticket.status === 'en_progreso'"
+                       [class.bg-success]="ticket.status === 'cerrado'"
+                       [class.text-success-content]="ticket.status === 'cerrado'">
+                    {{ ticket.status }}
+                  </div>
+                </td>
+
+                <!-- Botones de Acción (Se apilan en móviles: flex-col, y se alinean en PC:
+  sm:flex-row) -->
+                <td>
+                  <div class="flex flex-col xl:flex-row gap-2">
+                    <button class="btn btn-xs btn-outline btn-primary">Asignar</button>
+                    <button class="btn btn-xs btn-outline btn-ghost">Detalles</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+
+        <!-- Mensaje si no hay tickets -->
+        @if (ticketService.tickets().length === 0) {
+          <div class="text-center py-10 text-slate-400">
+            No hay incidencias reportadas en este momento.
+          </div>
+        }
+      </div>
+    </div>

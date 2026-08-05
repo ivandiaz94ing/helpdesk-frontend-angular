@@ -1,0 +1,182 @@
+<div class="min-h-screen bg-slate-100 font-sans text-slate-800 p-4 sm:p-8">
+
+      <div class="max-w-6xl mx-auto">
+        <!-- Botón para volver atrás (Usa ../ para subir un nivel en la URL o una ruta fija) -->
+        <a routerLink="/dashboard/app-user-dashboard" class="inline-flex items-center gap-2 text-slate-500
+  hover:text-primary transition-colors font-medium mb-6">
+          <i class='bx bx-arrow-back text-xl'></i> Volver al panel
+        </a>
+
+        <!-- Validamos si el ticket existe -->
+        @if (!ticket()) {
+          <div class="bg-white rounded-2xl p-12 text-center shadow-sm">
+            <i class='bx bx-error-circle text-6xl text-error mb-4'></i>
+            <h2 class="text-2xl font-bold text-slate-700">Ticket no encontrado</h2>
+            <p class="text-slate-500 mt-2">Es posible que haya sido eliminado o el enlace sea incorrecto.
+  </p>
+          </div>
+        } @else {
+
+          <!-- Contenedor Principal de dos columnas -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- COLUMNA IZQUIERDA: Hilo de Conversación (Ocupa 2 espacios) -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
+
+              <!-- Tarjeta del Problema Original -->
+              <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100">
+                <div class="flex flex-wrap items-center gap-3 mb-4">
+                  <span class="bg-slate-100 text-slate-500 font-bold px-3 py-1 rounded-lg text-sm">#REQ-00{{
+  ticket()!.id }}</span>
+                  <div class="badge font-bold border-0"
+                       [class.bg-error]="ticket()!.status === 'abierto'"
+                       [class.text-error-content]="ticket()!.status === 'abierto'"
+                       [class.bg-warning]="ticket()!.status === 'en_progreso'"
+                       [class.text-warning-content]="ticket()!.status === 'en_progreso'"
+                       [class.bg-success]="ticket()!.status === 'cerrado'"
+                       [class.text-success-content]="ticket()!.status === 'cerrado'">
+                    {{ ticket()!.status }}
+                  </div>
+                </div>
+
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-6">{{ ticket()!.title }}</h1>
+
+                <!-- Aquí usamos whitespace-pre-wrap para que se respeten los saltos de línea -->
+                <p class="text-slate-600 leading-relaxed whitespace-pre-wrap bg-slate-50 p-4 rounded-xl
+  border border-slate-100">
+                  {{ ticket()!.description }}
+                </p>
+              </div>
+
+              <!-- Área de Comentarios (Chat) -->
+              <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                  <i class='bx bx-conversation text-primary text-xl'></i> Historial de Seguimiento
+                </h3>
+
+                @if (!ticket()!.comments || ticket()!.comments!.length === 0) {
+                  <p class="text-center text-slate-400 py-8 italic border-2 border-dashed border-slate-100
+  rounded-xl">
+                    Aún no hay respuestas del técnico ni comentarios adicionales.
+                  </p>
+                } @else {
+                  <!-- Aquí irán los globos de chat más adelante -->
+                    <!-- Iteramos sobre los comentarios -->
+                  <div class="flex flex-col gap-4">
+                    @for (comentario of ticket()!.comments; track comentario.id) {
+
+                      <div class="flex gap-4 p-4 rounded-xl"
+                           [class.bg-slate-50]="comentario.user.id !== authService.user()?.id"
+                           [class.bg-primary/5]="comentario.user.id === authService.user()?.id">
+
+                        <!-- Avatar del autor -->
+                        <div class="avatar placeholder shrink-0">
+                          <div class="rounded-full w-10 h-10 flex items-center justify-center font-bold
+  text-sm shadow-sm"
+                               [class.bg-slate-200]="comentario.user.id !== authService.user()?.id"
+                               [class.text-slate-500]="comentario.user.id !== authService.user()?.id"
+                               [class.bg-primary]="comentario.user.id === authService.user()?.id"
+                               [class.text-white]="comentario.user.id === authService.user()?.id">
+                            {{ comentario.user.fullname.substring(0, 2).toUpperCase() }}
+                          </div>
+                        </div>
+
+                        <!-- Contenido del mensaje -->
+                        <div class="flex-1">
+                          <div class="flex items-center gap-2 mb-1">
+                            <span class="font-bold text-slate-700 text-sm">
+                              {{ comentario.user.id === authService.user()?.id ? 'Tú' : comentario.user.
+  fullname }}
+                            </span>
+                            <span class="text-xs text-slate-400">Hace un momento</span>
+                          </div>
+                          <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{{
+  comentario.message }}</p>
+                        </div>
+                      </div>
+
+                    }
+                  </div>   
+                }
+
+                <!-- Input para nuevo comentario -->
+                <div class="mt-8 pt-6 border-t border-slate-100 flex gap-4">
+                  <div class="avatar placeholder hidden sm:flex">
+                    <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-
+  center font-bold">
+                      TU
+                    </div>
+                  </div>
+                  <div class="flex-1 join">
+                    <input #inputMensaje type="text" placeholder="Escribe una respuesta o actualización..."
+  class="input input-bordered join-item w-full focus:outline-primary bg-slate-50" />
+                    <button class="btn btn-primary join-item px-8" (click)="enviarComentario(inputMensaje.
+  value); inputMensaje.value=''">Enviar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: Panel de Información (Ocupa 1 espacio) -->
+            <div class="flex flex-col gap-6">
+
+              <!-- Información del Equipo -->
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Equipo
+  Afectado</h3>
+
+                <div class="flex items-center gap-4 mb-4">
+                  <div class="bg-blue-50 text-blue-500 w-12 h-12 rounded-xl flex items-center justify-center
+  text-2xl">
+                    <i class='bx bx-desktop'></i>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-700">{{ ticket()!.equipo.nombre }}</p>
+                    <p class="text-sm text-slate-500">{{ ticket()!.equipo.marca }} {{ ticket()!.equipo.
+  modelo }}</p>
+                  </div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-lg text-sm text-slate-600 flex justify-between">
+                  <span class="font-semibold">N° Serie:</span>
+                  <span class="font-mono text-slate-400">{{ ticket()!.equipo.numeroSerie }}</span>
+                </div>
+              </div>
+
+              <!-- Información del Técnico -->
+              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Asignación</h3>
+
+                @if (ticket()!.tecnico) {
+                  <div class="flex items-center gap-4">
+                    <div class="avatar placeholder">
+                      <div class="bg-emerald-100 text-emerald-600 rounded-full w-12 h-12 flex items-center
+  justify-center font-bold text-lg">
+                        <i class='bx bx-user-check'></i>
+                      </div>
+                    </div>
+                    <div>
+                      <p class="font-bold text-slate-700">{{ ticket()!.tecnico?.fullname }}</p>
+                      <p class="text-sm text-emerald-600 font-medium">Técnico de Soporte</p>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="flex items-center gap-4 opacity-60">
+                    <div class="bg-slate-100 text-slate-400 w-12 h-12 rounded-full flex items-center
+  justify-center text-2xl">
+                      <i class='bx bx-time'></i>
+                    </div>
+                    <div>
+                      <p class="font-bold text-slate-500">Pendiente</p>
+                      <p class="text-sm text-slate-400">Buscando técnico...</p>
+                    </div>
+                  </div>
+                }
+              </div>
+
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+

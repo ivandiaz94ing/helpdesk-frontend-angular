@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
+import { TicketService } from '../../services/ticket.service';
 
 @Component({
   selector: 'admin-dashboard',
@@ -9,8 +10,9 @@ import { AuthService } from '../../../auth/services/auth.service';
   templateUrl: './admin-dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminDashboardComponent { 
+export class AdminDashboardComponent {
   private authService = inject(AuthService);
+  public ticketService = inject(TicketService);
 
   // Computed para obtener el usuario activo de forma reactiva
   public user = computed(() => this.authService.user());

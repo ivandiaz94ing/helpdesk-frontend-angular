@@ -1,6 +1,8 @@
 import { Routes } from "@angular/router";
 import { AdminDashboardComponent } from "./pages/admin-dashboard/admin-dashboard.component";
 import { UserDashboardComponent } from "./pages/user-dashboard/user-dashboard.component";
+import { AdminTickets } from './pages/admin-tickets/admin-tickets';
+import { TicketDetailComponent } from './pages/ticket-detail/ticket-detail.component';
 
 export const dashboardRoutes: Routes = [
 
@@ -11,6 +13,22 @@ export const dashboardRoutes: Routes = [
   {
     path: 'app-admin-dashboard',
     component: AdminDashboardComponent,
+    children: [
+      {
+        path: 'tickets', //Esta es la ruta para la tabla de incidencias
+        component: AdminTickets,
+      },
+
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'tickets',
+      }
+  ]
+  },
+  {
+    path: 'ticket/:id', // Ruta para ver los detalles de un ticket específico
+    component: TicketDetailComponent,
   },
   {
     path: '',
