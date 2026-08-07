@@ -60,7 +60,7 @@ export class TicketService {
           // Mapeamos la lista de tickets para encontrar el correcto y actualizarlo
           return listaTickets.map(ticket => {
             if (ticket.id === ticketId) {
-              
+
               // Creamos el nuevo comentario con el formato de tu base de datos
               const nuevoComentario = {
                 id: crypto.randomUUID(),
@@ -78,6 +78,26 @@ export class TicketService {
             return ticket;
           });
         });
+      }
+
+      // 5. ASIGNAR TECNICO A UN TICKET
+      asignarTecnico(ticketId: string, tecnico: UserBasic) {
+        this.tickets.update(lista => lista.map(ticket => {
+          if (ticket.id === ticketId) {
+            return { ...ticket, tecnico: tecnico, status: TicketStatus.EN_PROGRESO };
+          }
+          return ticket;
+        }));
+      }
+
+      // 6. CAMBIAR EL ESTADO DE UN TICKET
+      cambiarEstado(ticketId: string, nuevoEstado: TicketStatus) {
+        this.tickets.update(lista => lista.map(ticket => {
+          if (ticket.id === ticketId) {
+            return { ...ticket, status: nuevoEstado };
+          }
+          return ticket;
+        }));
       }
     }
 

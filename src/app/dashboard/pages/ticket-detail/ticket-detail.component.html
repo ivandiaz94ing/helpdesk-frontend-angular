@@ -66,17 +66,17 @@
                     @for (comentario of ticket()!.comments; track comentario.id) {
 
                       <div class="flex gap-4 p-4 rounded-xl"
-                           [class.bg-slate-50]="comentario.user.id !== authService.user()?.id"
-                           [class.bg-primary/5]="comentario.user.id === authService.user()?.id">
+                           [class.bg-slate-50]="comentario.user.id !== user()?.id"
+                           [class.bg-primary/5]="comentario.user.id === user()?.id">
 
                         <!-- Avatar del autor -->
                         <div class="avatar placeholder shrink-0">
                           <div class="rounded-full w-10 h-10 flex items-center justify-center font-bold
   text-sm shadow-sm"
-                               [class.bg-slate-200]="comentario.user.id !== authService.user()?.id"
-                               [class.text-slate-500]="comentario.user.id !== authService.user()?.id"
-                               [class.bg-primary]="comentario.user.id === authService.user()?.id"
-                               [class.text-white]="comentario.user.id === authService.user()?.id">
+                               [class.bg-slate-200]="comentario.user.id !== user()?.id"
+                               [class.text-slate-500]="comentario.user.id !== user()?.id"
+                               [class.bg-primary]="comentario.user.id === user()?.id"
+                               [class.text-white]="comentario.user.id === user()?.id">
                             {{ comentario.user.fullname.substring(0, 2).toUpperCase() }}
                           </div>
                         </div>
@@ -85,7 +85,7 @@
                         <div class="flex-1">
                           <div class="flex items-center gap-2 mb-1">
                             <span class="font-bold text-slate-700 text-sm">
-                              {{ comentario.user.id === authService.user()?.id ? 'Tú' : comentario.user.
+                              {{ comentario.user.id === user()?.id ? 'Tú' : comentario.user.
   fullname }}
                             </span>
                             <span class="text-xs text-slate-400">Hace un momento</span>
@@ -96,14 +96,13 @@
                       </div>
 
                     }
-                  </div>   
+                  </div>
                 }
 
                 <!-- Input para nuevo comentario -->
                 <div class="mt-8 pt-6 border-t border-slate-100 flex gap-4">
                   <div class="avatar placeholder hidden sm:flex">
-                    <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-
-  center font-bold">
+                    <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center font-bold leading-none">
                       TU
                     </div>
                   </div>
@@ -119,6 +118,38 @@
 
             <!-- COLUMNA DERECHA: Panel de Información (Ocupa 1 espacio) -->
             <div class="flex flex-col gap-6">
+              
+              <!-- Panel de Control Exclusivo para Staff (Técnicos/Admin) -->
+              @if (userRole() === 'agent' || userRole() === 'admin') {
+                <div class="bg-indigo-50 rounded-2xl p-6 shadow-sm border border-indigo-100">
+                  <h3 class="font-bold text-indigo-800 mb-4 flex items-center gap-2">
+                    <i class='bx bx-shield-quarter text-xl'></i> Acciones de Soporte
+                  </h3>
+                  
+                  <div class="flex flex-col gap-3">
+                    <!-- Botón para Tomar el Caso (Solo si no tiene técnico) -->
+                    @if (!ticket()!.tecnico) {
+                      <button class="btn btn-primary w-full shadow-md" (click)="tomarTicket()">
+                        Tomar este Ticket
+                      </button>
+                    }
+                    
+                    <!-- Cambiar Estado (Solo si el ticket ya está asignado a alguien) -->
+                    @if (ticket()!.tecnico) {
+                      <div class="form-control w-full">
+                        <label class="label"><span class="label-text text-indigo-700 font-medium">Cambiar Estado</span></label>
+                        <select class="select select-bordered border-indigo-200 bg-white w-full text-slate-700" 
+                                (change)="actualizarEstado($event)" 
+                                [value]="ticket()!.status">
+                          <option value="abierto">Abierto</option>
+                          <option value="en_progreso">En Progreso</option>
+                          <option value="cerrado">Cerrado / Resuelto</option>
+                        </select>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
 
               <!-- Información del Equipo -->
               <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">

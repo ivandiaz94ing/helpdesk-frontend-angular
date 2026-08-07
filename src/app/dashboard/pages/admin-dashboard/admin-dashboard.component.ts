@@ -16,6 +16,7 @@ export class AdminDashboardComponent {
 
   // Computed para obtener el usuario activo de forma reactiva
   public user = computed(() => this.authService.user());
+  public userRole = computed(() => this.user()?.role);
 
   // Obtenemos las iniciales del usuario (ej: 'ED') para el avatar
   public userInitials = computed(() => {
