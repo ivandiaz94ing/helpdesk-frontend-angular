@@ -10,8 +10,12 @@
         <!-- Botones de Acción -->
         <div class="flex gap-3 w-full sm:w-auto">
           <div class="join w-full sm:w-auto shadow-sm">
-            <input class="input input-bordered join-item w-full bg-white focus:outline-primary"
-  placeholder="Buscar usuario..."/>
+              <input
+              #inputBuscador
+              (input)="buscar(inputBuscador.value)"
+              class="input input-bordered join-item w-full bg-white focus:outline-primary"
+              placeholder="Buscar usuario..."/>
+
             <button class="btn btn-square join-item bg-slate-100 border-slate-200">
               <i class='bx bx-search text-xl text-slate-500'></i>
             </button>
@@ -40,7 +44,7 @@
             <!-- Cuerpo de la tabla -->
             <tbody>
               <!-- Recorremos la señal que trae los datos reales del backend -->
-              @for (user of usuarios(); track user.id) {
+              @for (user of usuariosFiltrados(); track user.id) {
                 <tr class="hover group transition-colors">
 
                   <!-- Columna 1: Avatar, Nombre y Email -->
