@@ -3,6 +3,7 @@ import { AdminDashboardComponent } from "./pages/admin-dashboard/admin-dashboard
 import { UserDashboardComponent } from "./pages/user-dashboard/user-dashboard.component";
 import { AdminTickets } from './pages/admin-tickets/admin-tickets';
 import { TicketDetailComponent } from './pages/ticket-detail/ticket-detail.component';
+import { AdminUsersComponent } from "./pages/admin-users/admin-users.component";
 
 export const dashboardRoutes: Routes = [
 
@@ -17,6 +18,10 @@ export const dashboardRoutes: Routes = [
       {
         path: 'tickets', //Esta es la ruta para la tabla de incidencias
         component: AdminTickets,
+      },
+      {
+        path: 'usuarios',
+        component: AdminUsersComponent,
       },
 
       {

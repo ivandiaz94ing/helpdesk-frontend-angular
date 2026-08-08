@@ -7,7 +7,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
   const token = inject(AuthService).token();
 
   //2. EXEPCIONES: Si la ruta es publica la dejo pasar sin el token
-  if (req.url.includes('login') || req.url.includes('register')) {
+  if (req.url.endsWith('login') || req.url.endsWith('register')) {
     return next(req);
   }
 

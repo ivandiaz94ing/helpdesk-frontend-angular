@@ -52,6 +52,7 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
+
   // Check Autentication
   checkAuthStatus(): Observable<boolean> {
     const token = localStorage.getItem('token');
@@ -82,16 +83,30 @@ export class AuthService {
     return true;
   }
 
-  private handleAuthError(err: any) {
-    this.clearSession();
-    return of(false);
+  // CONSULTAR USUARIOS
+  getUsers(): Observable<User[]> {
+    const token = this.token();
+    if (!token) {
+      return of([]);
+    }
+
+    return this.http.get<User[]>(`${baseUrl}user`);
   }
 
-  private clearSession(){
-    this._user.set(null);
-    this._token.set(null);
-    this._authStatus.set('not-authenticated');
-    localStorage.removeItem('token');
+  // CREAR USUARIO DESDE EL PANEL ADMIN (Sin iniciar sesión)
+  crearUsuarioAdmin(fullname: string, email: string, password: string, rol: string): Observable<boolean> {
+    return this.http.post<User>(`${baseUrl}user/register-admin`, {
+      fullname,
+      email,
+      password,
+      role: rol
+    }).pipe(
+      map(() => true), // Si todo sale bien, devolvemos verdadero
+      catchError((err) => {
+        console.error('Error creando usuario:', err);
+        return of(false);
+      })
+    );
   }
 
   // Register
@@ -106,5 +121,17 @@ export class AuthService {
         map((resp) => this.handleAuthSuccess(resp)),
         catchError((err: any) => this.handleAuthError(err)),
       );
+  }
+
+    private handleAuthError(err: any) {
+    this.clearSession();
+    return of(false);
+  }
+
+  private clearSession(){
+    this._user.set(null);
+    this._token.set(null);
+    this._authStatus.set('not-authenticated');
+    localStorage.removeItem('token');
   }
 }
