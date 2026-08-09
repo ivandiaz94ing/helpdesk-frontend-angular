@@ -114,7 +114,7 @@
       </div>
     </div>
 
-     <!-- MODAL NUEVO USUARIO -->
+     <!-- MODAL NUEVO USUARIO CON REACTIVE FORMS -->
     <dialog #modalNuevoUsuario id="modalNuevoUsuario" class="modal">
       <div class="modal-box bg-white rounded-2xl shadow-2xl">
         <div class="flex items-center justify-between mb-6">
@@ -124,6 +124,8 @@
           </button>
         </div>
 
+        <form [formGroup]="crearUsuarioForm" (ngSubmit)="crearUsuario()">
+
         <!-- Campo: Nombre Completo -->
         <div class="form-control w-full mb-4">
           <label class="label">
@@ -131,8 +133,12 @@
               Nombre Completo
             </span>
           </label>
-          <input #inputNombre type="text" placeholder="Ej. Juan Pérez" class="input input-bordered w-full
+          <input formControlName="fullname" type="text" placeholder="Ej. Juan Pérez" class="input input-bordered w-full
           bg-slate-50 focus:bg-white" />
+          @if(crearUsuarioForm.get('fullname')?.invalid && crearUsuarioForm.get('fullname')?.touched) {
+            <span class="text-xs text-error mt-1">El nombre es obligatorio y debe tener al menos 4 caracteres.</span>
+          }
+
         </div>
 
         <!-- Campo: Correo Electrónico -->
@@ -143,8 +149,11 @@
             </span>
           </label>
 
-          <input #inputEmail type="email" placeholder="juan.perez@ejercito.mil"
+          <input formControlName="email" type="email" placeholder="juan.perez@ejercito.mil"
           class="input input-bordered w-full bg-slate-50 focus:bg-white" />
+          @if(crearUsuarioForm.get('email')?.invalid && crearUsuarioForm.get('email')?.touched) {
+            <span class="text-xs text-error mt-1">Ingrese un correo válido.</span>
+          }
         </div>
 
         <!-- Campo: Rol del Funcionario -->
@@ -154,7 +163,7 @@
               Rol en el Sistema
             </span>
           </label>
-          <select #selectRol class="select select-bordered w-full bg-slate-50 focus:bg-white">
+          <select formControlName="role" class="select select-bordered w-full bg-slate-50 focus:bg-white">
             <option value="client" selected>
               Funcionario Regular (Cliente)
             </option>
@@ -173,11 +182,29 @@
         <div class="form-control w-full mb-6">
           <label class="label">
             <span class="label-text font-semibold text-slate-600">
-              Contraseña Temporal
+              Contraseña
             </span>
           </label>
-          <input #inputPassword type="password" placeholder="••••••••" class="input input-bordered w-full
+          <input formControlName="password" type="password" placeholder="••••••••" class="input input-bordered w-full
           bg-slate-50 focus:bg-white" />
+            <!-- MAGIA ROJA DINÁMICA MEJORADA -->
+            @if (crearUsuarioForm.get('password')?.touched && crearUsuarioForm.get('password')?.invalid) {
+
+              @if (crearUsuarioForm.get('password')?.hasError('required')) {
+                <span class="text-xs text-error mt-1">La contraseña es obligatoria.</span>
+
+              } @else if (crearUsuarioForm.get('password')?.hasError('minlength')) {
+                <span class="text-xs text-error mt-1">
+                  La contraseña debe tener al menos 6 caracteres.
+                </span>
+
+              } @else if (crearUsuarioForm.get('password')?.hasError('pattern')) {
+                <span class="text-xs text-error mt-1">
+                  Debe incluir al menos una mayúscula, una minúscula y un número.
+                </span>
+              }
+
+            }
         </div>
 
         <div class="modal-action mt-2">
@@ -185,18 +212,13 @@
             Cancelar
           </button>
 
-          <button class="btn btn-primary px-8 shadow-lg shadow-primary/30"
-            (click)="crearUsuario(
-              inputNombre.value,
-              inputEmail.value,
-              inputPassword.value,
-              selectRol.value
-            );
-            modalNuevoUsuario.close()">
+          <button type="submit" class="btn btn-primary px-8 shadow-lg shadow-primary/30"
+          [disabled]="crearUsuarioForm.invalid">
               Guardar Usuario
           </button>
 
         </div>
+        </form>
       </div>
 
       <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">

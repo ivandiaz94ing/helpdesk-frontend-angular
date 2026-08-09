@@ -3,15 +3,32 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../auth/services/auth.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { User } from '../../../auth/interfaces/user.interface';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-users',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './admin-users.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminUsersComponent implements OnInit {
   private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
+
+  public crearUsuarioForm = this.fb.group({
+    fullname: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
+    email: ['', [Validators.required, Validators.email]],
+    role: ['client' , [Validators.required]],
+    password: ['', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(35),
+      Validators.pattern(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)
+    ]],
+  });
 
   // Señal para recordar a quien voy a eliminar
   public usuarioAEliminar = signal<{ id: string; nombre: string } | null>(null);
@@ -106,10 +123,12 @@ export class AdminUsersComponent implements OnInit {
   }
 
 
-  crearUsuario(nombre: string, correo: string, password: string, rol: string) {
-    if (!nombre.trim() || !correo.trim() || !password.trim() || !rol.trim())
-      return;
-    this.authService.crearUsuarioAdmin(nombre, correo, password, rol).subscribe(exito => {
+  crearUsuario() {
+    if(this.crearUsuarioForm.invalid)  return;
+
+    const { fullname, email, password, role } = this.crearUsuarioForm.value;
+
+    this.authService.crearUsuarioAdmin(fullname!, email!, password!, role!).subscribe(exito => {
 
         if (exito) {
           console.log("¡Usuario creado con exito!");
@@ -117,6 +136,8 @@ export class AdminUsersComponent implements OnInit {
           modal.close();
           //window.location.reload();
           this.cargarUsuarios();
+          this.crearUsuarioForm.reset({ role: 'client' });
+
         } else {
           alert("Hubo un error al crear el usuario");
         }

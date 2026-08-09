@@ -55,15 +55,16 @@
 
         <div class="form-control w-full mb-5">
           <label class="label">
-            <span class="label-text font-medium text-base-content/80">Correo Electrónico</span>
+            <span class="label-text font-medium text-base-content/80">
+              Correo Electrónico
+            </span>
           </label>
-          <label class="input input-bordered flex items-center gap-3 focus-within:outline-
-  primary bg-base-200/50 transition-all">
+          <label class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all">
             <i class='bx bx-envelope text-xl opacity-50'></i>
             <input type="email" formControlName="email" class="grow" placeholder="usuario@ejercito.mil.co" />
           </label>
           @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-            <span class="label-text-alt text-error mt-1">Ingrese un correo válido.</span>
+          <span class="label-text-alt text-error mt-1">Ingrese un correo válido.</span>
           }
         </div>
 
