@@ -109,6 +109,7 @@ export class AuthService {
     );
   }
 
+
   // Register
   register(fullname: string, email: string, password: string): Observable<boolean> {
     return this.http
@@ -123,7 +124,30 @@ export class AuthService {
       );
   }
 
-    private handleAuthError(err: any) {
+  // EDITAR USUARIO
+  editarUsuarioAdmin(id: string, datosActualizados: any): Observable<boolean> {
+    return this.http.patch<User>(`${baseUrl}user/${id}`, datosActualizados).pipe(
+      map(() => true),
+      catchError((err) => {
+        console.error('Error al editar usuario:', err);
+        return of(false);
+      })
+    );
+  }
+
+
+  // ELIMINAR USUARIO DESDE EL PANEL ADMIN
+  eliminarUsuarioAdmin(userId: string): Observable<boolean> {
+    return this.http.delete(`${baseUrl}user/${userId}`).pipe(
+      map(() => true),
+      catchError((err) => {
+        console.error('Error al eliminar usuario:', err);
+        return of(false);
+      })
+    );
+  }
+
+  private handleAuthError(err: any) {
     this.clearSession();
     return of(false);
   }
