@@ -4,6 +4,7 @@ import { UserDashboardComponent } from "./pages/user-dashboard/user-dashboard.co
 import { AdminTickets } from './pages/admin-tickets/admin-tickets';
 import { TicketDetailComponent } from './pages/ticket-detail/ticket-detail.component';
 import { AdminUsersComponent } from "./pages/admin-users/admin-users.component";
+import { AdminGuard } from "../auth/guards/admin.guard";
 
 export const dashboardRoutes: Routes = [
 
@@ -14,6 +15,7 @@ export const dashboardRoutes: Routes = [
   {
     path: 'app-admin-dashboard',
     component: AdminDashboardComponent,
+    canMatch: [AdminGuard], // Solo los usuarios con rol de admin pueden acceder a esta ruta
     children: [
       {
         path: 'tickets', //Esta es la ruta para la tabla de incidencias

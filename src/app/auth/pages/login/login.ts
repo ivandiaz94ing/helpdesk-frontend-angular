@@ -41,7 +41,13 @@ export class Login {
 
     this.authService.login(email!, password!).subscribe( (isAuthenticated) => {
       if (isAuthenticated) {
-        this.router.navigate(['/dashboard/app-user-dashboard']);
+        const usuarioActual = this.authService.user();
+        console.log("Datos del usuario:", usuarioActual); // <-- Agrega esto
+        if (usuarioActual && usuarioActual.role === 'admin') {
+        this.router.navigate(['/dashboard/app-admin-dashboard']);
+        } else {
+          this.router.navigate(['/dashboard/app-user-dashboard']);
+        }
         return;
       }
 
