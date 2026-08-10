@@ -20,7 +20,7 @@
               <i class='bx bx-search text-xl text-slate-500'></i>
             </button>
           </div>
-          <button class="btn btn-primary shadow-lg shadow-primary/30 shrink-0" (click)="modalNuevoUsuario.showModal()">
+          <button class="btn btn-primary shadow-lg shadow-primary/30 shrink-0" (click)="abrirModalNuevo()">
             <i class='bx bx-user-plus text-xl'></i> <span class="hidden sm:inline">Nuevo</span>
           </button>
         </div>
@@ -117,89 +117,15 @@
 
 
      <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
-    <dialog id="modalEliminar" class="modal">
-      <div class="modal-box bg-white rounded-2xl shadow-2xl max-w-sm text-center p-8">
+      <app-modal-eliminar-usuario
+      [usuarioAEliminar]="usuarioAEliminar()"
+      (usuarioEliminadoExito)="cargarUsuarios()">
+    </app-modal-eliminar-usuario>
 
-        <!-- Ícono de Advertencia -->
-        <div class="w-20 h-20 bg-error/10 text-error rounded-full flex items-center justify-center text-4xl
-  mx-auto mb-6">
-          <i class='bx bx-trash'></i>
-        </div>
 
-        <h3 class="font-bold text-2xl text-slate-800 mb-2">¿Estás seguro?</h3>
-        <p class="text-slate-500 mb-8">
-          Deseas eliminar a <span class="font-bold text-slate-700">{{ usuarioAEliminar()?.nombre
-  }}</span>.
-          Esta acción es irreversible.
-        </p>
+    <!-- MODAL EDITAR USUARIO -->
+    <app-modal-editar-usuario
+    [usuario]="usuarioAEditar()"
+    (usuarioEditadoExito)="cargarUsuarios()">
+    </app-modal-editar-usuario>
 
-        <div class="flex gap-3 w-full">
-          <form method="dialog" class="w-1/2">
-            <!-- El botón dentro de form method="dialog" cierra el modal automáticamente -->
-            <button class="btn btn-ghost w-full text-slate-500 font-semibold bg-slate-100 hover:bg-slate-
-  200">Cancelar</button>
-          </form>
-          <button class="btn btn-error text-white w-1/2 shadow-lg shadow-error/30"
-  (click)="confirmarEliminacion()">
-            Sí, Eliminar
-          </button>
-        </div>
-      </div>
-
-      <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
-        <button>cerrar</button>
-      </form>
-    </dialog>
-
-    <!-- MODAL DE EDICIÓN DE USUARIO -->
-       <!-- MODAL EDITAR USUARIO -->
-    <dialog id="modalEditarUsuario" #modalEditarUsuario  class="modal">
-      <div class="modal-box bg-white rounded-2xl shadow-2xl">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="font-bold text-xl text-slate-800">Editar Funcionario</h3>
-          <button class="btn btn-sm btn-circle btn-ghost text-slate-400" (click)="modalEditarUsuario.close()">
-            <i class='bx bx-x text-2xl'></i>
-          </button>
-        </div>
-
-        <!-- Nombre -->
-        <div class="form-control w-full mb-4">
-          <label class="label"><span class="label-text font-semibold text-slate-600">Nombre
-  Completo</span></label>
-          <input #editNombre type="text" [value]="usuarioAEditar()?.fullname" class="input input-bordered w-
-  full bg-slate-50" />
-        </div>
-
-        <!-- Correo -->
-        <div class="form-control w-full mb-4">
-          <label class="label"><span class="label-text font-semibold text-slate-600">Correo
-  Institucional</span></label>
-          <input #editEmail type="email" [value]="usuarioAEditar()?.email" class="input input-bordered w-
-  full bg-slate-50" />
-        </div>
-
-        <!-- Rol -->
-        <div class="form-control w-full mb-6">
-          <label class="label"><span class="label-text font-semibold text-slate-600">Rol en el
-  Sistema</span></label>
-          <select #editRol class="select select-bordered w-full bg-slate-50" [value]="usuarioAEditar()?.
-  role">
-            <option value="client">Funcionario Regular (Cliente)</option>
-            <option value="agent">Tecnico (Agente)</option>
-            <option value="admin">Administrador (Control Total)</option>
-          </select>
-        </div>
-
-        <div class="modal-action mt-2">
-          <form method="dialog">
-            <button class="btn btn-ghost text-slate-500 font-semibold">Cancelar</button>
-          </form>
-          <button class="btn btn-primary px-8 shadow-lg shadow-primary/30"
-                  (click)="guardarEdicion(editNombre.value, editEmail.value, editRol.value)">
-            Actualizar
-          </button>
-        </div>
-      </div>
-      <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-
-  sm"><button>cerrar</button></form>
-    </dialog>

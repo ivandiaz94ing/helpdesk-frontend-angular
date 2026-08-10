@@ -4,13 +4,17 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { User } from '../../../auth/interfaces/user.interface';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ModalNuevoUsuarioComponent } from "../../components/modal-nuevo-usuario/modal-nuevo-usuario.component";
+import { ModalEditarUsuarioComponent } from "../../components/modal-editar-usuario/modal-editar-usuario.component";
+import { ModalEliminarUsuarioComponent } from "../../components/modal-eliminar-usuario/modal-eliminar-usuario.component";
 
 @Component({
   selector: 'app-admin-users',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ModalNuevoUsuarioComponent
+    ModalNuevoUsuarioComponent,
+    ModalEditarUsuarioComponent,
+    ModalEliminarUsuarioComponent
 ],
   templateUrl: './admin-users.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,6 +48,11 @@ export class AdminUsersComponent implements OnInit {
     );
   });
 
+  abrirModalNuevo() {
+        const modal = document.getElementById('modalNuevoUsuario') as HTMLDialogElement;
+        modal.showModal();
+      }
+
   // 4. Función para actualizar el término desde el HTML
   buscar(texto: string) {
     this.terminoBusqueda.set(texto);
@@ -72,44 +81,7 @@ export class AdminUsersComponent implements OnInit {
     modal.showModal();
   }
 
-  confirmarEliminacion( ) {
-    const usuarioId = this.usuarioAEliminar()?.id;
-    if (!usuarioId) return;
 
-    this.authService.eliminarUsuarioAdmin(usuarioId).subscribe(exito => {
-      if (exito) {
-        //window.location.reload();
-        const modal = document.getElementById('modalEliminar') as HTMLDialogElement;
-        modal.close();
-        //recargo solo la lista de usuarios
-        this.cargarUsuarios();
-      } else {
-        alert("Hubo un error al eliminar el usuario");
-      }
-    });
-
-  }
-
-  guardarEdicion(fullname: string, email: string, rol: string) {
-    const usuarioId = this.usuarioAEditar()?.id;
-    if (!usuarioId) return;
-
-    const datos = {fullname, email, role: rol };
-
-    this.authService.editarUsuarioAdmin(usuarioId, datos).subscribe(exito => {
-      if (exito) {
-        //window.location.reload();
-        //cierro el modal
-        const modal = document.getElementById('modalEditarUsuario') as HTMLDialogElement;
-        modal.close();
-        //recargo solo la lista de usuarios
-        this.cargarUsuarios();
-      } else {
-        alert("Hubo un error al editar el usuario");
-      }
-    });
-
-  }
 
 
 
