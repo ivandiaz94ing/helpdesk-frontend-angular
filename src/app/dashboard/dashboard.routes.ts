@@ -25,6 +25,10 @@ export const dashboardRoutes: Routes = [
         path: 'usuarios',
         component: AdminUsersComponent,
       },
+      {
+        path: 'equipos',
+        loadComponent: () => import('./pages/admin-equipos/admin-equipos.component'),
+      },
 
       {
         path: '',

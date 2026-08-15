@@ -1,0 +1,136 @@
+<div class="animate-fade-in p-4 sm:p-8">
+      <!-- Encabezado de la página -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 class="text-3xl font-bold text-slate-800">Inventario de Equipos</h1>
+          <p class="text-slate-500 mt-1">Administra el hardware y dispositivos de la organización.</p>
+        </div>
+
+        <!-- Buscador y Botón -->
+        <div class="flex gap-3 w-full sm:w-auto">
+          <div class="join w-full sm:w-auto shadow-sm">
+            <input #inputBuscador (input)="buscar(inputBuscador.value)"
+              class="input input-bordered join-item w-full bg-white focus:outline-primary"
+              placeholder="Buscar por serie o nombre..." />
+            <button class="btn btn-square join-item bg-slate-100 border-slate-200">
+              <i class='bx bx-search text-xl text-slate-500'></i>
+            </button>
+          </div>
+          <button class="btn btn-primary shadow-lg shadow-primary/30 shrink-0" (click)="abrirModalNuevo()">
+            <i class='bx bx-desktop text-xl'></i> <span class="hidden sm:inline">Nuevo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor de la Tabla -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="table table-zebra w-full text-slate-600">
+            <!-- Cabeza de la tabla -->
+            <thead class="bg-slate-50 text-slate-500 text-sm font-bold border-b border-slate-200">
+              <tr>
+                <th class="px-6 py-4">Equipo</th>
+                <th class="px-6 py-4 hidden sm:table-cell">Marca y Modelo</th>
+                <th class="px-6 py-4 text-center">No. Serie</th>
+                <th class="px-6 py-4 text-left hidden sm:table-cell">Asignado a</th>
+                <th class="px-6 py-4 text-center hidden sm:table-cell">Estado</th>
+                <th class="px-6 py-4 text-right">Acciones</th>
+              </tr>
+            </thead>
+
+            <!-- Cuerpo de la tabla -->
+            <tbody>
+              @for (equipo of equiposFiltrados(); track equipo.id) {
+                <tr class="hover group transition-colors">
+
+                  <!-- Columna 1: Icono y Nombre -->
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-4">
+                      <div class="avatar placeholder">
+                        <div class="bg-slate-200 text-slate-600 rounded-xl w-12 h-12 flex items-center justify-center font-bold text-2xl group-hover:bg-primary group-hover:text-white transition-colors">
+                          <i class='bx bx-devices'></i>
+                        </div>
+                      </div>
+                      <div class="font-bold text-slate-800 text-base">{{ equipo.nombre }}</div>
+                    </div>
+                  </td>
+
+                  <!-- Columna 2: Marca y Modelo -->
+                  <td class="px-6 py-4 hidden sm:table-cell">
+                    <div class="font-medium text-slate-700">{{ equipo.marca }}</div>
+                    <div class="text-sm opacity-70">{{ equipo.modelo }}</div>
+                  </td>
+
+                  <!-- Columna 3: No. Serie -->
+                  <td class="px-6 py-4 text-center">
+                    <div class="badge badge-outline text-xs font-mono py-2 px-3 text-slate-500">
+                      {{ equipo.numeroSerie }}
+                    </div>
+                  </td>
+
+                  <!-- Columna: Asignado a -->
+                  <td class="px-6 py-4 hidden sm:table-cell">
+                    @if (equipo.user) {
+                      <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                          <div class="bg-indigo-100 text-indigo-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs">
+                            {{ equipo.user.fullname.substring(0, 2).toUpperCase() }}
+                          </div>
+                        </div>
+                      <div>
+                      <div class="font-medium text-slate-700 text-sm">{{ equipo.user.fullname }}</div>
+                        <div class="text-xs opacity-70">{{ equipo.user.email }}</div>
+                        </div>
+                      </div>
+                    } @else {
+                      <span class="text-sm text-slate-400 italic">
+                        Sin asignar
+                      </span>
+                    }
+                  </td>
+
+
+                  <!-- Columna 4: Estado Activo/Inactivo -->
+                  <td class="px-6 py-4 text-center hidden sm:table-cell">
+                    <div class="flex items-center justify-center gap-2">
+                      <div class="w-2 h-2 rounded-full" [class.bg-success]="equipo.isActive" [class.bg-
+  error]="!equipo.isActive"></div>
+                      <span class="text-sm font-medium" [class.text-slate-700]="equipo.isActive" [class.
+  text-error]="!equipo.isActive">
+                        {{ equipo.isActive ? 'Operativo' : 'De Baja' }}
+                      </span>
+                    </div>
+                  </td>
+
+                  <!-- Columna 5: Acciones -->
+                  <td class="px-6 py-4 text-right">
+                    <div class="flex justify-end gap-2">
+                      <button class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-primary
+  hover:bg-primary/10" (click)="prepararEdicion(equipo)">
+                        <i class='bx bx-edit text-lg'></i>
+                      </button>
+                      <button class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-error
+  hover:bg-error/10" (click)="prepararEliminar(equipo.id, equipo.nombre)">
+                        <i class='bx bx-trash text-lg'></i>
+                      </button>
+                    </div>
+                  </td>
+
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <app-modal-nuevo-equipo (equipoCreadoExito)="cargarEquipos()"></app-modal-nuevo-equipo>
+
+    <app-modal-confirmacion
+      idModal="modalEliminarEquipo"
+      titulo="Eliminar Equipo"
+      [textoResaltado]="equipoAEliminar()?.nombre"
+      mensajePrincipal="¿Deseas eliminar el equipo"
+      textoBoton="Si, Eliminar Equipo"
+      (confirmado)="eliminarEquipo()">
+    </app-modal-confirmacion>
