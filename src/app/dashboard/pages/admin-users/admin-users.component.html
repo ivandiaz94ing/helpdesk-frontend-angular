@@ -117,10 +117,18 @@
 
 
      <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
-      <app-modal-eliminar-usuario
+      <!-- <app-modal-eliminar-usuario
       [usuarioAEliminar]="usuarioAEliminar()"
       (usuarioEliminadoExito)="cargarUsuarios()">
-    </app-modal-eliminar-usuario>
+    </app-modal-eliminar-usuario> -->
+    <app-modal-confirmacion
+    idModal="modalEliminar"
+    titulo="¿Estás seguro?"
+    mensajePrincipal="Deseas eliminar a"
+    [textoResaltado]="usuarioAEliminar()?.nombre"
+    textoBoton="Si, Eliminar"
+    (confirmado)="llamarAlBackendParaEliminarUsuario()">
+    </app-modal-confirmacion>
 
 
     <!-- MODAL EDITAR USUARIO -->

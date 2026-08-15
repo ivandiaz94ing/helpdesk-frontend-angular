@@ -1,0 +1,33 @@
+<dialog [id]="idModal()" class="modal">
+      <div class="modal-box bg-white rounded-2xl shadow-2xl max-w-sm text-center p-8">
+
+        <div class="w-20 h-20 bg-error/10 text-error rounded-full flex items-center
+  justify-center text-4xl mx-auto mb-6">
+          <i class='bx bx-trash'></i>
+        </div>
+
+        <h3 class="font-bold text-2xl text-slate-800 mb-2">{{ titulo() }}</h3>
+
+        <p class="text-slate-500 mb-8">
+          {{ mensajePrincipal() }}
+          @if (textoResaltado()) {
+            <span class="font-bold text-slate-700">{{ textoResaltado() }}</span>.
+          }
+        </p>
+
+        <div class="flex gap-3 w-full">
+          <form method="dialog" class="w-1/2">
+            <button class="btn btn-ghost w-full text-slate-500 font-semibold bg-slate-100
+  hover:bg-slate-200">Cancelar</button>
+          </form>
+          <!-- Al hacer clic, llamamos a ejecutarConfirmacion -->
+          <button class="btn btn-error text-white w-1/2 shadow-lg shadow-error/30"
+  (click)="ejecutarConfirmacion()">
+            {{ textoBoton() }}
+          </button>
+        </div>
+
+      </div>
+      <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-
+  sm"><button>cerrar</button></form>
+    </dialog>  

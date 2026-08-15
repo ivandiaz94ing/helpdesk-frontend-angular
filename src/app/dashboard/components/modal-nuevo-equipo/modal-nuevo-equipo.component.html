@@ -1,0 +1,87 @@
+<dialog id="modalNuevoEquipo" class="modal">
+  <div class="modal-box bg-white rounded-2xl shadow-2xl max-w-2xl">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="font-bold text-xl text-slate-800">Registrar Nuevo Equipo</h3>
+      <button type="button" class="btn btn-sm btn-circle btn-ghost text-slate-400" onclick="modalNuevoEquipo.close()">
+        <i class='bx bx-x text-2xl'></i>
+      </button>
+    </div>
+
+    <form [formGroup]="crearEquipoForm" (ngSubmit)="crearEquipo()">
+
+      <!-- Asignar a Usuario -->
+      <div class="form-control w-full mb-4">
+        <label class="label">
+          <span class="label-text font-semibold text-slate-600">
+            Funcionario Asignado (Dueño)
+          </span>
+        </label>
+        <select formControlName="usuarioResponsableId" class="select select-bordered w-full bg-slate-50">
+          <option value="" disabled selected>
+            Selecciona un funcionario...
+          </option>
+          @for (user of listaUsuarios(); track user.id) {
+          <option [value]="user.id">{{ user.fullname }} - {{ user.email }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Nombre -->
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-semibold text-slate-600">
+            Nombre / Tipo
+            </span>
+          </label>
+          <input formControlName="nombre" type="text" placeholder="Ej. Laptop HP" class="input input-bordered w-full bg-slate-50" />
+        </div>
+
+        <!-- No. Serie -->
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-semibold text-slate-600">
+              Número de Serie
+            </span>
+          </label>
+          <input formControlName="numeroSerie" type="text" placeholder="Ej. SN-123456" class="input input-bordered w-full bg-slate-50" />
+        </div>
+
+        <!-- Marca -->
+        <div class="form-control w-full mb-4">
+          <label class="label">
+            <span class="label-text font-semibold text-slate-600">
+              Marca
+            </span>
+          </label>
+          <input formControlName="marca" type="text" placeholder="Ej. Dell, HP, Apple" class="input input-bordered w-full bg-slate-50" />
+        </div>
+
+        <!-- Modelo -->
+        <div class="form-control w-full mb-6">
+          <label class="label">
+            <span class="label-text font-semibold text-slate-600">
+              Modelo
+            </span>
+          </label>
+          <input formControlName="modelo" type="text" placeholder="Ej. XPS 13" class="input input-bordered w-full bg-slate-50" />
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="modal-action mt-2 flex gap-2 justify-end">
+        <button type="button" class="btn btn-ghost text-slate-500 font-semibold"
+          onclick="modalNuevoEquipo.close()">Cancelar</button>
+        <button type="submit" class="btn btn-primary px-8 shadow-lg shadow-primary/30"
+          [disabled]="crearEquipoForm.invalid">
+          Guardar Equipo
+        </button>
+      </div>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
+    <button>
+      cerrar
+    </button>
+  </form>
+</dialog>

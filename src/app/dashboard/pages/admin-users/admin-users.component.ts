@@ -6,6 +6,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ModalNuevoUsuarioComponent } from "../../components/modal-nuevo-usuario/modal-nuevo-usuario.component";
 import { ModalEditarUsuarioComponent } from "../../components/modal-editar-usuario/modal-editar-usuario.component";
 import { ModalEliminarUsuarioComponent } from "../../components/modal-eliminar-usuario/modal-eliminar-usuario.component";
+import { ModalConfirmacionComponent } from "../../../shared/components/modal-confirmacion/modal-confirmacion.component";
 
 @Component({
   selector: 'app-admin-users',
@@ -14,7 +15,8 @@ import { ModalEliminarUsuarioComponent } from "../../components/modal-eliminar-u
     ReactiveFormsModule,
     ModalNuevoUsuarioComponent,
     ModalEditarUsuarioComponent,
-    ModalEliminarUsuarioComponent
+    ModalEliminarUsuarioComponent,
+    ModalConfirmacionComponent
 ],
   templateUrl: './admin-users.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,6 +81,19 @@ export class AdminUsersComponent implements OnInit {
     // Uso document.getElementById para abrir el modal desde TS
     const modal = document.getElementById('modalEditarUsuario') as HTMLDialogElement;
     modal.showModal();
+  }
+
+  llamarAlBackendParaEliminarUsuario() {
+    const usuarioId = this.usuarioAEliminar()?.id;
+    if (!usuarioId) return;
+
+    this.authService.eliminarUsuarioAdmin(usuarioId).subscribe(exito => {
+      if (exito) {
+        this.cargarUsuarios(); // Solo recargamos la tabla, el modal ya se cerró
+      } else {
+        alert("Hubo un error al eliminar el usuario");
+      }
+    });
   }
 
 
