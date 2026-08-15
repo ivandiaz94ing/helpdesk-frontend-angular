@@ -5,7 +5,6 @@ import { User } from '../../../auth/interfaces/user.interface';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ModalNuevoUsuarioComponent } from "../../components/modal-nuevo-usuario/modal-nuevo-usuario.component";
 import { ModalEditarUsuarioComponent } from "../../components/modal-editar-usuario/modal-editar-usuario.component";
-import { ModalEliminarUsuarioComponent } from "../../components/modal-eliminar-usuario/modal-eliminar-usuario.component";
 import { ModalConfirmacionComponent } from "../../../shared/components/modal-confirmacion/modal-confirmacion.component";
 
 @Component({
@@ -15,7 +14,6 @@ import { ModalConfirmacionComponent } from "../../../shared/components/modal-con
     ReactiveFormsModule,
     ModalNuevoUsuarioComponent,
     ModalEditarUsuarioComponent,
-    ModalEliminarUsuarioComponent,
     ModalConfirmacionComponent
 ],
   templateUrl: './admin-users.component.html',
