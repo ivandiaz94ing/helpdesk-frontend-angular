@@ -34,7 +34,7 @@ export class EquipoService {
       }
 
       // 3. EDITAR EQUIPO (PATCH /equipo/:id)
-      editarEquipo(id: string, datos: CreateEquipoDto): Observable<boolean> {
+      editarEquipo(id: string, datos: Partial<CreateEquipoDto>): Observable<boolean> {
         return this.http.patch(`${baseUrl}equipo/${id}`, datos).pipe(
           map(() => true),
           catchError(err => {

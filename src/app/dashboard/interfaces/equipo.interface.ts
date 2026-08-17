@@ -11,7 +11,6 @@ export interface Equipo {
   }
 
 export interface CreateEquipoDto {
-  id: string;               // Lo genera la base de datos
   nombre: string;
   modelo: string;
   marca: string;

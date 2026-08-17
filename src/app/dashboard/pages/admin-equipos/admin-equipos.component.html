@@ -134,3 +134,8 @@
       textoBoton="Si, Eliminar Equipo"
       (confirmado)="eliminarEquipo()">
     </app-modal-confirmacion>
+
+    <app-modal-editar-equipo
+    (equipoEditadoExito)="cargarEquipos()"
+    [equipo]="equipoAEditar()">
+    </app-modal-editar-equipo>

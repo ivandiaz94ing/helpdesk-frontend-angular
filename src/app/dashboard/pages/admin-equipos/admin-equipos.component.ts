@@ -4,10 +4,11 @@ import { Equipo } from '../../interfaces/ticket.interface';
 import { EquipoService } from '../../services/equipo.service';
 import { ModalNuevoEquipoComponent } from "../../components/modal-nuevo-equipo/modal-nuevo-equipo.component";
 import { ModalConfirmacionComponent } from "../../../shared/components/modal-confirmacion/modal-confirmacion.component";
+import { ModalEditarEquipoComponent } from "../../components/modal-editar-equipo/modal-editar-equipo.component";
 
 @Component({
   selector: 'app-admin-equipos',
-  imports: [CommonModule, ModalNuevoEquipoComponent, ModalConfirmacionComponent],
+  imports: [CommonModule, ModalNuevoEquipoComponent, ModalConfirmacionComponent, ModalEditarEquipoComponent],
   templateUrl: './admin-equipos.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -17,6 +18,7 @@ export default class AdminEquiposComponent implements OnInit {
 
   // Señal para recordar a quien voy a eliminar
     public equipoAEliminar = signal<{ id: string; nombre: string } | null>(null);
+    public equipoAEditar = signal< Equipo | null>(null);
 
   // Término de búsqueda
   public terminoBusqueda = signal('');
@@ -61,7 +63,9 @@ export default class AdminEquiposComponent implements OnInit {
   }
 
   prepararEdicion(equipo: Equipo) {
-    console.log("Preparar edición para:", equipo);
+    this.equipoAEditar.set(equipo);
+    const modal = document.getElementById('modalEditarEquipo') as HTMLDialogElement;
+    modal.show();
   }
 
   prepararEliminar(id: string, nombre: string) {

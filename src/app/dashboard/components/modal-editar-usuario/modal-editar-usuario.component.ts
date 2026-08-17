@@ -10,21 +10,21 @@ import { User } from '../../../auth/interfaces/user.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalEditarUsuarioComponent {
-   private fb = inject(FormBuilder);
-      private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
-      // 1. Recibimos al usuario desde el Padre
-      public usuario = input<User | null>(null);
+  // 1. Recibimos al usuario desde el Padre
+  public usuario = input<User | null>(null);
 
-      // 2. Nuestro Grito de éxito
-      public usuarioEditadoExito = output<void>();
+  // 2. Nuestro Grito de éxito
+  public usuarioEditadoExito = output<void>();
 
-      // 3. El Formulario Reactivo (igualito al de crear, pero sin el password)
-      public editarUsuarioForm = this.fb.group({
-        fullname: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
-        email: ['', [Validators.required, Validators.email]],
-        role: ['client', [Validators.required]],
-      });
+  // 3. El Formulario Reactivo (igualito al de crear, pero sin el password)
+  public editarUsuarioForm = this.fb.group({
+    fullname: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
+    email: ['', [Validators.required, Validators.email]],
+    role: ['client', [Validators.required]],
+  });
 
       // 4. El "Vigilante": Cuando el padre nos pase un usuario, rellenamos el formulario
       constructor() {

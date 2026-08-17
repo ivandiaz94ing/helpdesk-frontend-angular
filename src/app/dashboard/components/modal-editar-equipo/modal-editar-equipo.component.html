@@ -1,1 +1,113 @@
-<p>modal-editar-equipo works!</p>,
+<dialog id="modalEditarEquipo" class="modal">
+      <div class="modal-box bg-white rounded-2xl shadow-2xl max-w-2xl">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-bold text-xl text-slate-800">Editar Equipo</h3>
+
+          <button
+          type="button"
+          class="btn btn-sm btn-circle btn-ghost text-slate-400"
+          onclick="modalEditarEquipo.close()">
+            <i class='bx bx-x text-2xl'></i>
+          </button>
+        </div>
+
+        <form
+        [formGroup]="editarEquipoForm"
+        (ngSubmit)="guardarEdicion()">
+
+          <!-- Asignar a Usuario y Estado Activo -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text font-semibold text-slate-600">
+                  Funcionario Asignado
+                </span>
+              </label>
+              <select
+                formControlName="usuarioResponsableId"
+                class="select select-bordered w-full bg-slate-50">
+                <option value="" disabled selected>
+                  Selecciona un funcionario...
+                </option>
+                @for (user of listaUsuarios(); track user.id) {
+                  <option [value]="user.id">
+                    {{ user.fullname }} - {{ user.email}}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text font-semibold text-slate-600">
+                  Estado del Equipo
+                </span>
+              </label>
+              <!-- Fíjate que usamos [ngValue] para pasar verdaderos booleanos -->
+              <select formControlName="isActive" class="select select-bordered w-full bg-slate-50">
+                <option [ngValue]="true">
+                  Operativo
+                </option>
+                <option [ngValue]="false">
+                  De Baja (Inactivo)
+                </option>
+              </select>
+            </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="form-control w-full mb-4">
+                <label class="label">
+                  <span class="label-text font-semibold text-slate-600">
+                    Nombre / Tipo
+                  </span>
+                </label>
+                <input formControlName="nombre" type="text" class="input input-bordered w-full bg-slate-50" />
+              </div>
+
+              <div class="form-control w-full mb-4">
+                <label class="label">
+                  <span class="label-text font-semibold text-slate-600">
+                    Número de Serie
+                  </span>
+                </label>
+                <input formControlName="numeroSerie" type="text" class="input input-bordered w-full bg-slate-50" />
+              </div>
+
+              <div class="form-control w-full mb-4">
+                <label class="label">
+                  <span class="label-text font-semibold text-slate-600">
+                    Marca
+                  </span>
+                </label>
+                <input formControlName="marca" type="text" class="input input-bordered w-full bg-slate-50" />
+              </div>
+
+              <div class="form-control w-full mb-6">
+                <label class="label">
+                  <span class="label-text font-semibold text-slate-600">
+                    Modelo
+                  </span>
+                </label>
+                <input formControlName="modelo" type="text" class="input input-bordered w-full bg-slate-50" />
+              </div>
+            </div>
+
+            <div class="modal-action mt-2 flex gap-2 justify-end">
+              <button type="button" class="btn btn-ghost text-slate-500 font-semibold"
+                onclick="modalEditarEquipo.close()">
+                  Cancelar
+              </button>
+
+              <button type="submit"
+                class="btn btn-primary px-8 shadow-lg shadow-primary/30"
+                [disabled]="editarEquipoForm.invalid">
+                  Actualizar Equipo
+              </button>
+              
+            </div>
+            </form>
+            </div>
+            <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-
+              sm"><button>cerrar</button></form>
+            </dialog>
