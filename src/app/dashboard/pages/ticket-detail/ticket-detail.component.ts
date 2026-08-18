@@ -1,57 +1,117 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { TicketStatus } from '../../interfaces/ticket.interface';
+import { Ticket, TicketPriority, TicketStatus } from '../../interfaces/ticket.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import { TicketService } from '../../services/ticket.service';
 
-    @Component({
-      selector: 'app-ticket-detail',
-      standalone: true,
-      imports: [CommonModule, RouterLink], // RouterLink es vital para el botón de "Volver"
-      templateUrl: './ticket-detail.component.html',
-    })
-    export class TicketDetailComponent {
-      private route = inject(ActivatedRoute);
-      public ticketService = inject(TicketService);
-      private authService = inject(AuthService);
+@Component({
+  selector: 'app-ticket-detail',
+  standalone: true,
+  imports: [CommonModule,],
+  templateUrl: './ticket-detail.component.html',
+})
+export class TicketDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  public ticketService = inject(TicketService);
+  private authService = inject(AuthService);
 
-      // Exponemos el rol públicamente de forma segura
-      public userRole = computed(() => this.authService.user()?.role);
-      public user = computed(() => this.authService.user());
+  public userRole = computed(() => this.authService.user()?.role);
+  public user = computed(() => this.authService.user());
 
-      // 1. Capturamos el ID que viene en la URL (ej: /ticket/123 -> id: '123')
-      public ticketId = this.route.snapshot.paramMap.get('id');
+  public ticketId = this.route.snapshot.paramMap.get('id');
+  public readonly TicketPriority = TicketPriority;
+  public readonly TicketStatus = TicketStatus;
+  public mensajeExito = signal<string | null>(null);
+  // Nueva señal para la lista de técnicos disponibles
+  public agentes = signal<any[]>([]);
 
-      // 2. Buscamos el ticket en nuestra base de datos simulada
-      public ticket = computed(() => {
-        return this.ticketService.tickets().find(t => t.id === this.ticketId);
+  // Lo convertimos en un Signal normal
+  public ticket = signal<Ticket | null>(null);
+
+  volver() {
+        // Si eres administrador, te devuelve a tu tabla
+        if (this.userRole() === 'admin') {
+          this.router.navigate(['/dashboard/app-admin-dashboard/tickets']);
+        } else {
+          // Si eres usuario normal, te devuelve a la tuya
+          this.router.navigate(['/dashboard/app-user-dashboard']);
+        }
+      }
+
+  ngOnInit() {
+    if (this.ticketId) {
+      // Temporalmente traemos todos y filtramos, hasta que en NestJS crees el GET/ticket/:id
+      this.ticketService.getTickets().subscribe((tickets) => {
+        const t = tickets.find((x) => x.id === this.ticketId);
+        if (t) this.ticket.set(t);
       });
-
-      // 3. Función para que el usuario agregue un comentario al chat
-      enviarComentario(mensaje: string) {
-        if (!mensaje.trim()) return; // No enviamos mensajes vacíos
-
-        const usuarioLogueado = this.authService.user();
-        if (!usuarioLogueado) return;
-
-        // Llamamos a nuestro servicio pasándole el ID del ticket actual, el mensaje y quién lo escribió
-        this.ticketService.agregarComentario(this.ticketId!, mensaje, usuarioLogueado);
-      }
-
-      // Funcion para tomar el caso
-      tomarTicket(){
-        const tecnico = this.authService.user();
-        if (!tecnico || !this.ticketId) return;
-        this.ticketService.asignarTecnico(this.ticketId, tecnico);
-      }
-
-      // Funcion para cambiar el estado del ticket
-      actualizarEstado(event: Event){
-        const selectElement = event.target as HTMLSelectElement;
-        const nuevoEstado = selectElement.value as TicketStatus;
-        if (!this.ticketId) return;
-        this.ticketService.cambiarEstado(this.ticketId, nuevoEstado);
-      }
     }
+
+    // NUEVO: Si es Admin, traemos a los agentes para el selector
+      if (this.userRole() === 'admin') {
+        this.authService.getUsers().subscribe((usuarios) => {
+          // Asumiendo que el rol del técnico en tu BD se guarda como 'agent'.
+          // Si se guarda en mayúscula 'AGENT', cámbialo aquí.
+          const soloTecnicos = usuarios.filter(u => u.role === 'agent');
+          this.agentes.set(soloTecnicos);
+        });
+      }
+  }
+
+  enviarComentario(mensaje: string) {
+    console.log('Pendiente: Crear lógica de comentarios en el backend');
+  }
+
+  asignarTecnico(event: Event) {
+
+    const selectElement = event.target as HTMLSelectElement;
+    const nuevoTecnicoId = selectElement.value;
+
+    if (!this.ticketId || !nuevoTecnicoId) return;
+
+    this.ticketService
+      .editarTicket(this.ticketId, { tecnicoId: nuevoTecnicoId })
+      .subscribe((exito) => {
+        if (exito) {
+          // Actualizamos la UI al instante encontrando el nombre del técnico
+          const tecnicoElegido = this.agentes().find(a => a.id === nuevoTecnicoId);
+          if (tecnicoElegido) {
+            this.ticket.update(t => t ? { ...t, tecnico: tecnicoElegido } : t);
+          }
+
+          this.mensajeExito.set('El ticket fue asignado al técnico exitosamente');
+          setTimeout(() => this.mensajeExito.set(null), 3000);
+        }
+      });
+      }
+
+
+
+  actualizarEstado(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const nuevoEstado = selectElement.value as TicketStatus;
+    if (!this.ticketId) return;
+
+    // Aquí sí usamos la función real que hicimos hace un rato
+    this.ticketService.editarTicket(
+      this.ticketId, { status: nuevoEstado })
+      .subscribe((exito) => {
+        if(exito){
+
+          // 1. Magia Reactiva: Actualizamos el ticket local sin hacer F5
+          this.ticket.update(t => t ? { ...t, status: nuevoEstado } : t);
+
+          // 2. Mostramos la notificación elegante
+          this.mensajeExito.set('El estado del ticket se actualizó correctamente');
+
+          // 3. Escondemos la notificación después de 3 segundos (3000 ms)
+          setTimeout(() => {
+            this.mensajeExito.set(null);
+          }, 1000);
+        }
+      });
+  }
+}

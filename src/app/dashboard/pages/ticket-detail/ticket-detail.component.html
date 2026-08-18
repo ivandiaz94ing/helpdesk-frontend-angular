@@ -1,213 +1,239 @@
-<div class="min-h-screen bg-slate-100 font-sans text-slate-800 p-4 sm:p-8">
+  <!-- Notificación Flotante Premium y Grande -->
+    @if(mensajeExito()) {
+      <div class="toast toast-top toast-center sm:toast-end z-[100] mt-4 mr-4">
+        <div class="bg-white border-l-8 border-emerald-500 rounded-2xl shadow-2xl p-5
+  flex items-center gap-5 min-w-[360px] animate-fade-in-down">
 
-      <div class="max-w-6xl mx-auto">
-        <!-- Botón para volver atrás (Usa ../ para subir un nivel en la URL o una ruta fija) -->
-        <a routerLink="/dashboard/app-user-dashboard" class="inline-flex items-center gap-2 text-slate-500
-  hover:text-primary transition-colors font-medium mb-6">
-          <i class='bx bx-arrow-back text-xl'></i> Volver al panel
-        </a>
-
-        <!-- Validamos si el ticket existe -->
-        @if (!ticket()) {
-          <div class="bg-white rounded-2xl p-12 text-center shadow-sm">
-            <i class='bx bx-error-circle text-6xl text-error mb-4'></i>
-            <h2 class="text-2xl font-bold text-slate-700">Ticket no encontrado</h2>
-            <p class="text-slate-500 mt-2">Es posible que haya sido eliminado o el enlace sea incorrecto.
-  </p>
+          <!-- Círculo Verde con el Check Gigante -->
+          <div class="bg-emerald-100 rounded-full h-14 w-14 flex items-center justify-
+  center shrink-0">
+            <i class='bx bx-check text-4xl text-emerald-600 font-bold'></i>
           </div>
-        } @else {
 
-          <!-- Contenedor Principal de dos columnas -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Textos -->
+          <div class="flex flex-col">
+            <h4 class="text-emerald-700 font-extrabold text-lg leading-tight mb-
+  1">¡Actualizado!</h4>
+            <span class="text-slate-600 font-medium text-base leading-snug">{{
+  mensajeExito() }}</span>
+          </div>
 
-            <!-- COLUMNA IZQUIERDA: Hilo de Conversación (Ocupa 2 espacios) -->
-            <div class="lg:col-span-2 flex flex-col gap-6">
+        </div>
+      </div>
+    }
 
-              <!-- Tarjeta del Problema Original -->
-              <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100">
-                <div class="flex flex-wrap items-center gap-3 mb-4">
-                  <span class="bg-slate-100 text-slate-500 font-bold px-3 py-1 rounded-lg text-sm">#REQ-00{{
-  ticket()!.id }}</span>
-                  <div class="badge font-bold border-0"
-                       [class.bg-error]="ticket()!.status === 'abierto'"
-                       [class.text-error-content]="ticket()!.status === 'abierto'"
-                       [class.bg-warning]="ticket()!.status === 'en_progreso'"
-                       [class.text-warning-content]="ticket()!.status === 'en_progreso'"
-                       [class.bg-success]="ticket()!.status === 'cerrado'"
-                       [class.text-success-content]="ticket()!.status === 'cerrado'">
-                    {{ ticket()!.status }}
-                  </div>
-                </div>
+ @if(ticket()) {
+    <div class="max-w-6xl mx-auto pb-10 font-sans">
 
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-6">{{ ticket()!.title }}</h1>
-
-                <!-- Aquí usamos whitespace-pre-wrap para que se respeten los saltos de línea -->
-                <p class="text-slate-600 leading-relaxed whitespace-pre-wrap bg-slate-50 p-4 rounded-xl
-  border border-slate-100">
-                  {{ ticket()!.description }}
-                </p>
-              </div>
-
-              <!-- Área de Comentarios (Chat) -->
-              <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-100">
-                <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-                  <i class='bx bx-conversation text-primary text-xl'></i> Historial de Seguimiento
-                </h3>
-
-                @if (!ticket()!.comments || ticket()!.comments!.length === 0) {
-                  <p class="text-center text-slate-400 py-8 italic border-2 border-dashed border-slate-100
-  rounded-xl">
-                    Aún no hay respuestas del técnico ni comentarios adicionales.
-                  </p>
-                } @else {
-                  <!-- Aquí irán los globos de chat más adelante -->
-                    <!-- Iteramos sobre los comentarios -->
-                  <div class="flex flex-col gap-4">
-                    @for (comentario of ticket()!.comments; track comentario.id) {
-
-                      <div class="flex gap-4 p-4 rounded-xl"
-                           [class.bg-slate-50]="comentario.user.id !== user()?.id"
-                           [class.bg-primary/5]="comentario.user.id === user()?.id">
-
-                        <!-- Avatar del autor -->
-                        <div class="avatar placeholder shrink-0">
-                          <div class="rounded-full w-10 h-10 flex items-center justify-center font-bold
-  text-sm shadow-sm"
-                               [class.bg-slate-200]="comentario.user.id !== user()?.id"
-                               [class.text-slate-500]="comentario.user.id !== user()?.id"
-                               [class.bg-primary]="comentario.user.id === user()?.id"
-                               [class.text-white]="comentario.user.id === user()?.id">
-                            {{ comentario.user.fullname.substring(0, 2).toUpperCase() }}
-                          </div>
-                        </div>
-
-                        <!-- Contenido del mensaje -->
-                        <div class="flex-1">
-                          <div class="flex items-center gap-2 mb-1">
-                            <span class="font-bold text-slate-700 text-sm">
-                              {{ comentario.user.id === user()?.id ? 'Tú' : comentario.user.
-  fullname }}
-                            </span>
-                            <span class="text-xs text-slate-400">Hace un momento</span>
-                          </div>
-                          <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{{
-  comentario.message }}</p>
-                        </div>
-                      </div>
-
-                    }
-                  </div>
-                }
-
-                <!-- Input para nuevo comentario -->
-                <div class="mt-8 pt-6 border-t border-slate-100 flex gap-4">
-                  <div class="avatar placeholder hidden sm:flex">
-                    <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center font-bold leading-none">
-                      TU
-                    </div>
-                  </div>
-                  <div class="flex-1 join">
-                    <input #inputMensaje type="text" placeholder="Escribe una respuesta o actualización..."
-  class="input input-bordered join-item w-full focus:outline-primary bg-slate-50" />
-                    <button class="btn btn-primary join-item px-8" (click)="enviarComentario(inputMensaje.
-  value); inputMensaje.value=''">Enviar</button>
-                  </div>
-                </div>
-              </div>
+      <!-- Header con botón de volver -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+        <button (click)="volver()"
+        class="btn btn-circle btn-ghost bg-white shadow-sm border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-primary transition-all">
+          <i class='bx bx-arrow-back text-xl'></i>
+        </button>
+        <div>
+          <div class="flex flex-wrap items-center gap-3">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">
+              {{ ticket()?.title}}
+            </h1>
+            <div class="badge border-0 uppercase font-bold text-[10px] tracking-wider px-3 py-2"
+                 [class.bg-error]="ticket()?.status === 'abierto'" [class.text-error-content]="ticket()?.status === 'abierto'"
+                 [class.bg-warning]="ticket()?.status === 'en proceso'" [class.text-warning-content]="ticket()?.status === 'en proceso'"
+                 [class.bg-success]="ticket()?.status === 'cerrado'" [class.text-success-content]="ticket()?.status === 'cerrado'">
+              {{ ticket()?.status }}
             </div>
+          </div>
+          <p class="text-slate-400 text-xs mt-2 font-mono">
+            ID Requerimiento: #{{ticket()?.id }}
+          </p>
+        </div>
+      </div>
 
-            <!-- COLUMNA DERECHA: Panel de Información (Ocupa 1 espacio) -->
-            <div class="flex flex-col gap-6">
-              
-              <!-- Panel de Control Exclusivo para Staff (Técnicos/Admin) -->
-              @if (userRole() === 'agent' || userRole() === 'admin') {
-                <div class="bg-indigo-50 rounded-2xl p-6 shadow-sm border border-indigo-100">
-                  <h3 class="font-bold text-indigo-800 mb-4 flex items-center gap-2">
-                    <i class='bx bx-shield-quarter text-xl'></i> Acciones de Soporte
-                  </h3>
-                  
-                  <div class="flex flex-col gap-3">
-                    <!-- Botón para Tomar el Caso (Solo si no tiene técnico) -->
-                    @if (!ticket()!.tecnico) {
-                      <button class="btn btn-primary w-full shadow-md" (click)="tomarTicket()">
-                        Tomar este Ticket
-                      </button>
-                    }
-                    
-                    <!-- Cambiar Estado (Solo si el ticket ya está asignado a alguien) -->
-                    @if (ticket()!.tecnico) {
-                      <div class="form-control w-full">
-                        <label class="label"><span class="label-text text-indigo-700 font-medium">Cambiar Estado</span></label>
-                        <select class="select select-bordered border-indigo-200 bg-white w-full text-slate-700" 
-                                (change)="actualizarEstado($event)" 
-                                [value]="ticket()!.status">
-                          <option value="abierto">Abierto</option>
-                          <option value="en_progreso">En Progreso</option>
-                          <option value="cerrado">Cerrado / Resuelto</option>
-                        </select>
-                      </div>
-                    }
-                  </div>
-                </div>
-              }
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <!-- COLUMNA IZQUIERDA: Descripción y Comentarios -->
+        <div class="xl:col-span-2 space-y-6">
 
-              <!-- Información del Equipo -->
-              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Equipo
-  Afectado</h3>
+          <!-- Card Descripción -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8">
+            <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+              <div class="bg-primary/10 text-primary p-2 rounded-lg">
+                <i class='bx bx-align-left text-xl'></i>
+              </div>
+              Detalles del Problema
+            </h3>
+            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+              <p class="text-slate-600 whitespace-pre-line leading-relaxed text-sm sm:text-base">
+                {{ ticket()?.description }}
+              </p>
+            </div>
+          </div>
 
-                <div class="flex items-center gap-4 mb-4">
-                  <div class="bg-blue-50 text-blue-500 w-12 h-12 rounded-xl flex items-center justify-center
-  text-2xl">
-                    <i class='bx bx-desktop'></i>
+          <!-- Card Comentarios (Placeholder para el futuro) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8 opacity-80">
+            <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+              <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
+                <i class='bx bx-message-square-dots text-xl'></i></div>
+              Bitácora y Comentarios
+            </h3>
+            <div class="text-center py-12 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
+              <i class='bx bx-time text-4xl text-slate-300 mb-2'></i>
+              <p class="text-slate-500 text-sm font-medium">
+                El módulo de comentarios está en construcción.
+              </p>
+              <p class="text-slate-400 text-xs mt-1">
+                Pronto los técnicos y usuarios podrán chatear aquí.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: Sidebar de Info y Acciones -->
+        <div class="space-y-6">
+
+          <!-- Info del Ticket -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
+            <h3 class="font-bold text-slate-800 text-base mb-5 uppercase tracking-wider">
+              Ficha Técnica
+            </h3>
+
+            <div class="space-y-5">
+              <!-- Solicitante -->
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                  Solicitante
+                </p>
+                <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <div class="avatar placeholder">
+                    <div class="bg-blue-100 text-blue-700 rounded-full w-9 h-9 flex items-center justify-center font-bold text-xs">
+                      {{ ticket()?.user?.fullname?.substring(0, 2)?.toUpperCase() }}
+                    </div>
                   </div>
                   <div>
-                    <p class="font-bold text-slate-700">{{ ticket()!.equipo.nombre }}</p>
-                    <p class="text-sm text-slate-500">{{ ticket()!.equipo.marca }} {{ ticket()!.equipo.
-  modelo }}</p>
+                    <p class="text-sm font-bold text-slate-700 leading-tight">
+                      {{ ticket()?.user?.fullname }}
+                    </p>
+                    <p class="text-[11px] text-slate-500">
+                      {{ ticket()?.user?.email}}
+                    </p>
                   </div>
-                </div>
-
-                <div class="bg-slate-50 p-3 rounded-lg text-sm text-slate-600 flex justify-between">
-                  <span class="font-semibold">N° Serie:</span>
-                  <span class="font-mono text-slate-400">{{ ticket()!.equipo.numeroSerie }}</span>
                 </div>
               </div>
 
-              <!-- Información del Técnico -->
-              <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Asignación</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <!-- Categoría -->
+                <div>
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                    Categoría
+                  </p>
+                  <p class="text-sm font-semibold text-slate-700 bg-slate-100 px-2 py-1 rounded-md inline-block">
+                    {{ ticket()?.categoria }}
+                  </p>
+                </div>
 
-                @if (ticket()!.tecnico) {
-                  <div class="flex items-center gap-4">
-                    <div class="avatar placeholder">
-                      <div class="bg-emerald-100 text-emerald-600 rounded-full w-12 h-12 flex items-center
-  justify-center font-bold text-lg">
-                        <i class='bx bx-user-check'></i>
-                      </div>
-                    </div>
-                    <div>
-                      <p class="font-bold text-slate-700">{{ ticket()!.tecnico?.fullname }}</p>
-                      <p class="text-sm text-emerald-600 font-medium">Técnico de Soporte</p>
-                    </div>
+                <!-- Prioridad -->
+                <div>
+                  <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                    Prioridad
+                  </p>
+
+                  <div class="badge badge-sm border-0 uppercase font-bold tracking-wider"
+                    [ngClass]="{
+                    'bg-red-100 text-red-700': ticket()?.priority === TicketPriority.ALTA,
+                    'bg-orange-100 text-orange-700': ticket()?.priority === TicketPriority.MEDIA,
+                    'bg-blue-100 text-blue-700': ticket()?.priority === TicketPriority.BAJA
+                    }">
+                    {{ ticket()?.priority }}
                   </div>
-                } @else {
-                  <div class="flex items-center gap-4 opacity-60">
-                    <div class="bg-slate-100 text-slate-400 w-12 h-12 rounded-full flex items-center
-  justify-center text-2xl">
-                      <i class='bx bx-time'></i>
-                    </div>
-                    <div>
-                      <p class="font-bold text-slate-500">Pendiente</p>
-                      <p class="text-sm text-slate-400">Buscando técnico...</p>
-                    </div>
-                  </div>
-                }
+
+                </div>
               </div>
 
+              <!-- Fecha de Creación -->
+              <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+                  Fecha de Apertura
+                </p>
+                <p class="text-xs font-medium text-slate-600 flex items-center gap-1">
+                  <i class='bx bx-calendar'></i>
+                  {{ ticket()?.createdAt | date:'medium'}}
+                </p>
+              </div>
             </div>
           </div>
-        }
+
+          <!-- Acciones del Administrador -->
+          @if (userRole() === 'admin') {
+          <div class="bg-gray-900 rounded-2xl shadow-xl shadow-gray-900/20 border border-gray-800 p-6 text-white relative overflow-hidden">
+
+            <!-- Elemento de fondo decorativo -->
+            <div class="absolute -right-6 -top-6 text-gray-800 opacity-50">
+              <i class='bx bx-cog text-8xl'></i>
+            </div>
+
+            <h3 class="font-bold text-slate-100 text-base mb-5 uppercase tracking-wider relative z-10">
+              Control de Caso
+            </h3>
+
+            <div class="space-y-4 relative z-10">
+              <!-- Cambiar Estado -->
+              <div class="form-control w-full">
+                <label class="label"><span class="label-text text-gray-400 text-[10px] uppercase font-bold tracking-widest">
+                  Cambiar Estado
+                </span>
+              </label>
+                <select class="select select-bordered w-full bg-gray-800 text-white border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all" (change)="actualizarEstado($event)">
+                  <option value="abierto" [selected]="ticket()?.status === TicketStatus.ABIERTO">
+                    🟠 Mantener Abierto
+                  </option>
+                  <option value="en proceso" [selected]="ticket()?.status === TicketStatus.EN_PROCESO">
+                    🟡 Marcar En Progreso
+                  </option>
+                  <option value="cerrado" [selected]="ticket()?.status === TicketStatus.CERRADO">
+                    🟢 Cerrar Ticket
+                  </option>
+                </select>
+                <p class="text-[10px] text-gray-500 mt-2">
+                  Al cambiar el estado, se notificará al usuario automáticamente.
+                </p>
+              </div>
+            </div>
+
+
+                  <!-- 2. Asignar Técnico (¡El que nos faltaba!) -->
+                  <div class="form-control w-full mt-4 border-t border-gray-800 pt-4">
+                    <label class="label"><span class="label-text text-gray-400 text-
+  [10px] uppercase font-bold tracking-widest">
+                      Asignar a Técnico
+                    </span></label>
+                    <select class="select select-bordered w-full bg-gray-800 text-white
+  border-gray-700 focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+  (change)="asignarTecnico($event)">
+                      <option value="" disabled [selected]="!ticket()?.
+  tecnico">Selecciona un técnico...</option>
+
+                      @for(agente of agentes(); track agente.id) {
+                        <option [value]="agente.id" [selected]="ticket()?.tecnico?.id
+  === agente.id">
+                          👨‍💻 {{ agente.fullname }}
+                        </option>
+                      }
+                    </select>
+                  </div>    
+
+
+          </div>
+          }
+
+        </div>
       </div>
     </div>
-
+    } @else {
+      <!-- Pantalla de Carga -->
+      <div class="flex flex-col items-center justify-center h-96">
+        <span class="loading loading-spinner loading-lg text-primary"></span>
+        <p class="mt-4 text-slate-500 font-medium animate-pulse">
+          Cargando detalles de la incidencia...
+        </p>
+      </div>
+    }

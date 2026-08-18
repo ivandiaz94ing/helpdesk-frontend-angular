@@ -90,7 +90,7 @@
         </div>
 
         <!-- LISTA DE TICKETS -->
-        @if (ticketService.tickets().length === 0) {
+        @if (misTickets().length === 0) {
         <!-- Empty State -->
         <div
           class="flex flex-col items-center justify-center p-16 bg-white rounded-2xl shadow-sm border border-slate-200 border-dashed mt-8">
@@ -105,7 +105,7 @@
         } @else {
         <!-- Grid de Tarjetas -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          @for (ticket of ticketService.tickets(); track ticket.id) {
+          @for (ticket of misTickets(); track ticket.id) {
           <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md hover:border-primary/20 transition-all flex flex-col group">
 
             <!-- Encabezado (ID y Estado) -->
@@ -114,8 +114,8 @@
               <div class="badge font-bold border-0 text-[10px] sm:text-xs"
                    [class.bg-error]="ticket.status === 'abierto'"
                    [class.text-error-content]="ticket.status === 'abierto'"
-                   [class.bg-warning]="ticket.status === 'en_progreso'"
-                   [class.text-warning-content]="ticket.status === 'en_progreso'"
+                   [class.bg-warning]="ticket.status === 'en proceso'"
+                   [class.text-warning-content]="ticket.status === 'en proceso'"
                    [class.bg-success]="ticket.status === 'cerrado'"
                    [class.text-success-content]="ticket.status === 'cerrado'">
                 {{ ticket.status }}
@@ -163,7 +163,7 @@
             class="text-sm font-semibold text-primary/80 hover:text-primary transition-colors inline-flex
   items-center gap-1">
       Ver Detalles <i class='bx bx-right-arrow-alt text-lg'></i>
-    </button> 
+    </button>
             </div>
           </div>
           }
@@ -196,7 +196,7 @@
           <label class="label"><span class="label-text font-semibold text-slate-600">¿Qué equipo está fallando?</span></label>
           <select #selectEquipo class="select select-bordered w-full bg-slate-50 focus:bg-white">
             <option disabled selected value="">Selecciona un equipo</option>
-            @for (equipo of ticketService.equipos(); track equipo.id) {
+            @for (equipo of misEquipos(); track equipo.id) {
               <option [value]="equipo.id">{{ equipo.nombre }} ({{ equipo.marca }})</option>
             }
           </select>

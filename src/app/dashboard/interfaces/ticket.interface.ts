@@ -14,7 +14,7 @@
 
     export enum TicketStatus {
       ABIERTO = 'abierto',
-      EN_PROGRESO = 'en_progreso',
+      EN_PROCESO = 'en proceso',
       CERRADO = 'cerrado'
     }
 
@@ -65,10 +65,10 @@
       comments?: Comment[];
     }
 
-    export interface TicketCreateDTO {
+    export interface CreateTicketDTO {
       titulo: string;
       descripcion: string;
-      equipoId: string; // ID del equipo al que pertenece el ticket
+      prioridad: TicketPriority;
       categoria: TicketCategory;
-      usuarioActual: UserBasic; // ID del técnico asignado (opcional)
+      equipoId: string; // ID del equipo al que pertenece el ticket
     }

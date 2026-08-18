@@ -68,26 +68,23 @@
                     </div>
                   </td>
 
-                  <!-- Columna: Asignado a -->
-                  <td class="px-6 py-4 hidden sm:table-cell">
-                    @if (equipo.user) {
-                      <div class="flex items-center gap-3">
-                        <div class="avatar placeholder">
-                          <div class="bg-indigo-100 text-indigo-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-xs">
-                            {{ equipo.user.fullname.substring(0, 2).toUpperCase() }}
-                          </div>
-                        </div>
-                      <div>
-                      <div class="font-medium text-slate-700 text-sm">{{ equipo.user.fullname }}</div>
-                        <div class="text-xs opacity-70">{{ equipo.user.email }}</div>
-                        </div>
+                <!-- Columna: Asignado a -->
+                <td class="hidden md:table-cell">
+                  @if(equipo.user) {
+                    <div class="flex flex-col justify-center">
+                      <div class="text-sm font-semibold text-slate-700">
+                        {{ equipo.user.fullname }}
                       </div>
-                    } @else {
-                      <span class="text-sm text-slate-400 italic">
-                        Sin asignar
-                      </span>
-                    }
-                  </td>
+                      <div class="text-xs opacity-70">
+                        {{ equipo.user.email }}
+                      </div>
+                    </div>
+                  } @else {
+                    <span class="text-xs italic text-slate-400">
+                      Sin asignar
+                    </span>
+                  }
+                </td>
 
 
                   <!-- Columna 4: Estado Activo/Inactivo -->
