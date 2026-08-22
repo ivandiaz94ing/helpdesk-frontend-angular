@@ -23,6 +23,7 @@ import { HttpClient } from '@angular/common/http';
 
       // 2. CREAR TICKET (POST /ticket)
       crearTicket(datos: CreateTicketDTO): Observable<boolean> {
+        
         return this.http.post<Ticket>(`${baseUrl}ticket`, datos).pipe(
           map(() => true),
           catchError(err => {

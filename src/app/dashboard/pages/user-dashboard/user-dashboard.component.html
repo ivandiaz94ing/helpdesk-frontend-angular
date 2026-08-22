@@ -177,50 +177,92 @@
 <!-- MODAL DE NUEVO REQUERIMIENTO -->
   <!-- MODAL DE NUEVO REQUERIMIENTO -->
     <dialog #modalTicket class="modal">
-      <div class="modal-box bg-white rounded-2xl shadow-2xl">
+      <div class="modal-box bg-white rounded-2xl shadow-2xl max-w-2xl">
         <div class="flex items-center justify-between mb-6">
             <h3 class="font-bold text-xl text-slate-800">Reportar Incidencia</h3>
-            <button class="btn btn-sm btn-circle btn-ghost text-slate-400" (click)="modalTicket.close()"><i class='bx bx-x text-
-  2xl'></i></button>
+            <button class="btn btn-sm btn-circle btn-ghost text-slate-400" (click)="modalTicket.
+  close()"><i class='bx bx-x text-2xl'></i></button>
         </div>
 
-        <!-- Título -->
-        <div class="form-control w-full mb-4">
-          <label class="label"><span class="label-text font-semibold text-slate-600">Título breve</span></label>
-          <input #inputTitulo type="text" placeholder="Ej. Impresora atascada" class="input input-bordered w-full bg-slate-50 focus:bg-
-  white" />
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <!-- Título -->
+          <div class="form-control w-full md:col-span-2">
+            <label class="label"><span class="label-text font-semibold text-slate-600">Título
+  breve</span></label>
+            <input #inputTitulo type="text" placeholder="Ej. Impresora atascada" class="input
+  input-bordered w-full bg-slate-50 focus:bg-white" />
+          </div>
 
-        <!-- Selección de Equipo (Leemos los equipos del servicio) -->
-        <div class="form-control w-full mb-4">
-          <label class="label"><span class="label-text font-semibold text-slate-600">¿Qué equipo está fallando?</span></label>
-          <select #selectEquipo class="select select-bordered w-full bg-slate-50 focus:bg-white">
-            <option disabled selected value="">Selecciona un equipo</option>
-            @for (equipo of misEquipos(); track equipo.id) {
-              <option [value]="equipo.id">{{ equipo.nombre }} ({{ equipo.marca }})</option>
-            }
-          </select>
+          <!-- Selección de Equipo -->
+          <div class="form-control w-full md:col-span-2">
+            <label class="label"><span class="label-text font-semibold text-slate-600">¿Qué
+  equipo está fallando?</span></label>
+            <select #selectEquipo class="select select-bordered w-full bg-slate-50 focus:bg-
+  white">
+              <option disabled selected value="">Selecciona un equipo...</option>
+              @for (equipo of misEquipos(); track equipo.id) {
+                <option [value]="equipo.id">{{ equipo.nombre }} ({{ equipo.marca }})</option>
+              }
+            </select>
+          </div>
+
+          <!-- Categoría -->
+          <div class="form-control w-full">
+            <label class="label"><span class="label-text font-semibold text-slate-
+  600">Categoría</span></label>
+            <select #selectCategoria class="select select-bordered w-full bg-slate-50 focus:bg-
+  white">
+              <option disabled selected value="">Selecciona categoría...</option>
+              <option value="Falla_de_red">Falla de Red</option>
+              <option value="Solicitud_de_hardware">Hardware</option>
+              <option value="Solicitud_de_software">Software</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+
+          <!-- Prioridad -->
+          <div class="form-control w-full">
+            <label class="label"><span class="label-text font-semibold text-slate-
+  600">Prioridad</span></label>
+            <select #selectPrioridad class="select select-bordered w-full bg-slate-50 focus:bg-
+  white">
+              <option disabled selected value="">Selecciona prioridad...</option>
+              <option value="baja">Baja (No urgente)</option>
+              <option value="media">Media</option>
+              <option value="alta">Alta (Urgente)</option>
+            </select>
+          </div>
         </div>
 
         <!-- Descripción detallada -->
         <div class="form-control w-full mb-6">
-          <label class="label"><span class="label-text font-semibold text-slate-600">Descripción detallada</span></label>
-          <textarea #inputDescripcion placeholder="Describe el problema exacto..." class="textarea textarea-bordered bg-slate-50 w-full
-  focus:bg-white h-24 resize-none" ></textarea>
+          <label class="label"><span class="label-text font-semibold text-slate-600">Descripción
+  detallada</span></label>
+          <textarea #inputDescripcion placeholder="Describe el problema exacto..."
+  class="textarea textarea-bordered bg-slate-50 w-full focus:bg-white h-24 resize-
+  none"></textarea>
         </div>
 
-        <div class="modal-action mt-2">
-          <button class="btn btn-ghost text-slate-500 font-semibold" (click)="modalTicket.close()">Cancelar</button>
+        <div class="modal-action mt-2 border-t border-slate-100 pt-4">
+          <button class="btn btn-ghost text-slate-500 font-semibold" (click)="modalTicket.
+  close()">Cancelar</button>
+
+          <!-- Botón de Envío -->
           <button class="btn btn-primary px-8 shadow-lg shadow-primary/30"
-                  (click)="crearTicket(inputTitulo.value, inputDescripcion.value, selectEquipo.value); modalTicket.close(); inputTitulo.
-  value=''; inputDescripcion.value=''; selectEquipo.value=''">
+                  (click)="crearTicket(inputTitulo.value, inputDescripcion.value, selectEquipo.
+  value, selectCategoria.value, selectPrioridad.value); modalTicket.close(); inputTitulo.
+  value=''; inputDescripcion.value=''; selectEquipo.value=''; selectCategoria.value='';
+  selectPrioridad.value=''">
             Enviar Reporte
           </button>
         </div>
       </div>
 
+      <!-- Fondo oscuro del modal y cerrar al dar clic fuera -->
       <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
         <button>cerrar</button>
       </form>
-    </dialog>
+    </dialog>      
+
+
 

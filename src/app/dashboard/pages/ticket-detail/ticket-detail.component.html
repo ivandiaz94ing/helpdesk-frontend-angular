@@ -120,6 +120,50 @@
                 </div>
               </div>
 
+              <!-- Técnico Asignado (Visible para todos) -->
+                  <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
+                      Técnico Asignado
+                    </p>
+
+                    @if (ticket()?.tecnico) {
+                      <!-- Estado: Asignado -->
+                      <div class="flex items-center gap-3 bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                        <div class="avatar placeholder">
+                          <div class="bg-emerald-200 text-emerald-700 rounded-full w-9 h-9 flex items-center justify-center font-bold text-xs">
+                            {{ ticket()?.tecnico?.fullname?.substring(0, 2)?.toUpperCase() }}
+                          </div>
+                        </div>
+                        <div>
+                          <p class="text-sm font-bold text-emerald-800 leading-tight">
+                            {{ ticket()?.tecnico?.fullname }}
+                          </p>
+                          <p class="text-[11px] text-emerald-600 font-medium">
+                            Responsable del caso
+                          </p>
+                        </div>
+                      </div>
+                      <!-- Estado: Pendiente de Asignación -->
+                    } @else {
+                      <div class="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-dashed border-slate-200 opacity-80">
+                        <div class="bg-slate-200 text-slate-400 rounded-full w-9 h-9 flex items-center justify-center">
+                          <i class='bx bx-user-x text-lg'></i>
+                        </div>
+                        <div>
+                          <p class="text-sm font-semibold text-slate-500 leading-tight">
+                            Sin asignar
+                          </p>
+                          <p class="text-[11px] text-slate-400">
+                            En espera de un técnico
+                          </p>
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+              <!-- Divisor para separar personas de datos técnicos -->
+              <div class="divider my-1"></div>
+
               <div class="grid grid-cols-2 gap-4">
                 <!-- Categoría -->
                 <div>
@@ -127,7 +171,7 @@
                     Categoría
                   </p>
                   <p class="text-sm font-semibold text-slate-700 bg-slate-100 px-2 py-1 rounded-md inline-block">
-                    {{ ticket()?.categoria }}
+                    {{ ticket()?.category }}
                   </p>
                 </div>
 
@@ -219,7 +263,7 @@
                         </option>
                       }
                     </select>
-                  </div>    
+                  </div>
 
 
           </div>

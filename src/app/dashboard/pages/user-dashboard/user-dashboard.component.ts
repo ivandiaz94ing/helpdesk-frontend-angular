@@ -17,6 +17,9 @@ export class UserDashboardComponent implements OnInit {
   public authService = inject(AuthService);
   public equipoService = inject(EquipoService);
 
+  public readonly TicketCategory = TicketCategory;
+  public readonly TicketPriority = TicketPriority;
+
   public user = computed(() => this.authService.user());
 
   // Señales locales para guardar los datos de la base de datos
@@ -48,22 +51,29 @@ export class UserDashboardComponent implements OnInit {
 
 
 
-  crearTicket(titulo: string, descripcion: string, equipoId: string) {
-    if (!titulo.trim() || !descripcion.trim() || !equipoId) return;
-    this.ticketService.crearTicket({
-      titulo: titulo,
-      descripcion: descripcion,
-      equipoId: equipoId,
-      categoria: TicketCategory.FALLA_RED,
-      prioridad: TicketPriority.BAJA,
-    }).subscribe(exito => {
-      if(exito){
-        this.cargarDatos();
-      } else {
-        alert("Error creando ticket");
-      }
-    });
-  }
+crearTicket(titulo: string, descripcion: string, equipoId: string, category: string,
+  priority: string) {
+        // 1. Pequeña validación Frontend
+        if (!titulo.trim() || !descripcion.trim() || !equipoId || !category || !priority) {
+          alert("Por favor, completa todos los campos del formulario.");
+          return;
+        }
+
+        // 2. Enviamos el formato exacto que NestJS exige ahora
+        this.ticketService.crearTicket({
+          title: titulo,
+          description: descripcion,
+          category: category as TicketCategory,
+          priority: priority as TicketPriority,
+          equipoId: equipoId
+        }).subscribe(exito => {
+          if(exito){
+            this.cargarDatos();
+          } else {
+            alert("Ocurrió un error creando el ticket");
+          }
+        });
+      } 
 
   onLogout(){
     this.authService.logout();

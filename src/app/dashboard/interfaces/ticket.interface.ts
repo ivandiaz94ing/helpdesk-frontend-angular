@@ -50,7 +50,7 @@
       title: string;
       description: string;
       priority: TicketPriority;
-      categoria: TicketCategory;
+      category: TicketCategory;
       status: TicketStatus;
       createdAt: Date;
       updatedAt: Date | null;
@@ -66,9 +66,9 @@
     }
 
     export interface CreateTicketDTO {
-      titulo: string;
-      descripcion: string;
-      prioridad: TicketPriority;
-      categoria: TicketCategory;
+      title: string;
+      description: string;
+      priority: TicketPriority;
+      category: TicketCategory;
       equipoId: string; // ID del equipo al que pertenece el ticket
     }
