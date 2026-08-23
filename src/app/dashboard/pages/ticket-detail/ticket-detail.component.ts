@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { Ticket, TicketPriority, TicketStatus } from '../../interfaces/ticket.interface';
 import { AuthService } from '../../../auth/services/auth.service';
 import { TicketService } from '../../services/ticket.service';
+import { RelativeDatePipe } from '../../pipes/relative-date.pipe';
 
 @Component({
   selector: 'app-ticket-detail',
   standalone: true,
-  imports: [CommonModule,],
+  imports: [CommonModule, RelativeDatePipe],
   templateUrl: './ticket-detail.component.html',
 })
 export class TicketDetailComponent implements OnInit {
@@ -61,9 +62,25 @@ export class TicketDetailComponent implements OnInit {
       }
   }
 
-  enviarComentario(mensaje: string) {
-    console.log('Pendiente: Crear lógica de comentarios en el backend');
-  }
+   enviarComentario(mensaje: string, inputElement: HTMLInputElement) {
+        if (!mensaje.trim() || !this.ticketId) return;
+
+        this.ticketService.agregarComentario(this.ticketId, mensaje).subscribe((nuevoComentario) => {
+          // Magia Reactiva: Actualizamos el array de comentarios instantáneamente
+          this.ticket.update(t => {
+            if (!t) return t;
+            // Si ya tenía comentarios le sumamos este, si no, creamos el array
+            const comentariosActuales = t.comments || [];
+            return { ...t, comments: [...comentariosActuales, nuevoComentario] };
+          });
+
+          // Limpiamos la caja de texto
+          inputElement.value = '';
+        });
+      }
+
+
+
 
   asignarTecnico(event: Event) {
 

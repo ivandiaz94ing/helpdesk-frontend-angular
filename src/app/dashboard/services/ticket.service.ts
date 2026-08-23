@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
     import { inject, Injectable } from '@angular/core';
     import { catchError, Observable, of, map } from 'rxjs';
-    import { Ticket, CreateTicketDTO } from '../interfaces/ticket.interface';
+
+    import { Ticket, CreateTicketDTO, Comment } from '../interfaces/ticket.interface';
 
     const baseUrl = 'https://helpdesk-backend-api-54750791481.southamerica-east1.run.app/';
 
@@ -23,7 +24,7 @@ import { HttpClient } from '@angular/common/http';
 
       // 2. CREAR TICKET (POST /ticket)
       crearTicket(datos: CreateTicketDTO): Observable<boolean> {
-        
+
         return this.http.post<Ticket>(`${baseUrl}ticket`, datos).pipe(
           map(() => true),
           catchError(err => {
@@ -53,5 +54,10 @@ import { HttpClient } from '@angular/common/http';
             return of(false);
           })
         );
+      }
+
+      // Agrega esto dentro de tu clase TicketService
+      agregarComentario(ticketId: string, message: string): Observable<Comment> {
+        return this.http.post<Comment>(`${baseUrl}comments/${ticketId}`, { message });
       }
     }

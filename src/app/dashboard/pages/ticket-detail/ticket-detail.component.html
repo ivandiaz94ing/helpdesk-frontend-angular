@@ -69,22 +69,73 @@
           </div>
 
           <!-- Card Comentarios (Placeholder para el futuro) -->
-          <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8 opacity-80">
-            <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
-              <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
-                <i class='bx bx-message-square-dots text-xl'></i></div>
-              Bitácora y Comentarios
-            </h3>
-            <div class="text-center py-12 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200">
-              <i class='bx bx-time text-4xl text-slate-300 mb-2'></i>
-              <p class="text-slate-500 text-sm font-medium">
-                El módulo de comentarios está en construcción.
-              </p>
-              <p class="text-slate-400 text-xs mt-1">
-                Pronto los técnicos y usuarios podrán chatear aquí.
-              </p>
-            </div>
-          </div>
+                         <!-- Card Comentarios (Chat) -->
+              <div class="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col
+  h-[500px]">
+                <!-- Header del Chat -->
+                <div class="p-6 border-b border-slate-100">
+                  <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                    <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
+                      <i class='bx bx-message-square-dots text-xl'></i>
+                    </div>
+                    Bitácora del Caso
+                  </h3>
+                </div>
+
+                <!-- Área de Mensajes (Scrollable) -->
+                <div class="flex-1 overflow-y-auto p-6 bg-slate-50/50 space-y-4">
+
+                  @if (!ticket()?.comments || ticket()?.comments?.length === 0) {
+                    <div class="text-center py-10 opacity-70">
+                      <i class='bx bx-chat text-4xl text-slate-300 mb-2'></i>
+                      <p class="text-slate-500 text-sm">No hay mensajes aún.</p>
+                      <p class="text-slate-400 text-xs">Escribe el primer comentario para
+  iniciar la conversación.</p>
+                    </div>
+                  }
+
+                  @for (comment of ticket()?.comments; track comment.id) {
+                    <!-- Burbuja de Chat -->
+                    <!-- Comparamos el ID del comentario con tu ID logueado para saber si es
+  "mío" (derecha) o "de otro" (izquierda) -->
+                    <div class="chat" [ngClass]="comment.user.id === user()?.id ? 'chat-end' :
+  'chat-start'">
+                      <div class="chat-image avatar placeholder">
+                        <div class="w-8 rounded-full flex items-center justify-center" [ngClass]="comment.user.id === user()?.id
+  ? 'bg-primary text-white' : 'bg-slate-200 text-slate-600'">
+                          <span class="text-xs font-bold">{{ comment.user.fullname.substring(0,
+  2).toUpperCase() }}</span>
+                        </div>
+                      </div>
+                      <div class="chat-header text-xs text-slate-500 mb-1">
+                        {{ comment.user.fullname }}
+                        <time class="text-xs opacity-50 ml-1">
+                          {{ comment.createdAt | relativeDate }}
+                        </time>
+                      </div>
+                     <div class="chat-bubble text-sm shadow-sm" [ngClass]="comment.user.id === user()?.id ?
+  'chat-bubble-primary text-white' : 'bg-slate-200 text-slate-800'">
+                        {{ comment.message }}
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <!-- Input para enviar mensaje -->
+                <div class="p-4 border-t border-slate-100 bg-white rounded-b-2xl">
+                  <div class="flex items-center gap-2">
+                    <input #inputMensaje
+                           (keyup.enter)="enviarComentario(inputMensaje.value, inputMensaje)"
+                           type="text"
+                           placeholder="Escribe un mensaje aquí..."
+                           class="input input-bordered w-full bg-slate-50 focus:bg-white" />
+                    <button class="btn btn-primary btn-circle shadow-md shadow-primary/30"
+                            (click)="enviarComentario(inputMensaje.value, inputMensaje)">
+                      <i class='bx bx-send text-xl'></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
 
         </div>
 
