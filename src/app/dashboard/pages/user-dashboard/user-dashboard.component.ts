@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TicketService } from '../../services/ticket.service';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -8,7 +9,7 @@ import { EquipoService } from '../../services/equipo.service';
 @Component({
   selector: 'user-dashboard',
   standalone: true,
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: './user-dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -73,7 +74,7 @@ crearTicket(titulo: string, descripcion: string, equipoId: string, category: str
             alert("Ocurrió un error creando el ticket");
           }
         });
-      } 
+      }
 
   onLogout(){
     this.authService.logout();

@@ -110,7 +110,9 @@
 
             <!-- Encabezado (ID y Estado) -->
             <div class="flex justify-between items-start mb-3">
-              <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md">#REQ-00{{ ticket.id }}</span>
+              <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md">
+                #REQ-{{ ticket.id | slice:0:6 | uppercase }}
+              </span>
               <div class="badge font-bold border-0 text-[10px] sm:text-xs"
                    [class.bg-error]="ticket.status === 'abierto'"
                    [class.text-error-content]="ticket.status === 'abierto'"
@@ -262,7 +264,7 @@
       <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-sm">
         <button>cerrar</button>
       </form>
-    </dialog>      
+    </dialog>
 
 
 

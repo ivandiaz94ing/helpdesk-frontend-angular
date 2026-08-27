@@ -96,8 +96,13 @@
                             title="Ver Detalles">
                       <i class='bx bx-show text-lg'></i>
                     </button>
-                    <button class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-warning hover:bg-warning/10 transition-colors" title="Asignar Técnico">
+                    <!-- <button class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-warning hover:bg-warning/10 transition-colors" title="Asignar Técnico">
                       <i class='bx bx-user-pin text-lg'></i>
+                    </button> -->
+                    <button class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-error hover:bg-error/10 transition-colors"
+                      title="Eliminar Ticket"
+                      (click)="prepararEliminacion(ticket.id)">
+                      <i class='bx bx-trash text-lg'></i>
                     </button>
                   </div>
                 </td>
@@ -119,3 +124,12 @@
         }
       </div>
     </div>
+
+      <!-- Modal Elegante de Confirmación -->
+    <app-modal-confirmacion
+      [idModal]="'modalEliminarTicket'"
+      [titulo]="'¿Estás seguro?'"
+      [mensajePrincipal]="'¿Esta acción es irreversible.'"
+      [textoBoton]="'Sí, Eliminar Ticket'"
+      (confirmado)="borrarTicketConfirmado()">
+    </app-modal-confirmacion>
