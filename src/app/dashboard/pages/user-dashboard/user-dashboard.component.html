@@ -82,11 +82,13 @@
             <p class="text-slate-500 mt-1">Revisa el estado de tus solicitudes o crea una nueva incidencia.</p>
           </div>
           <!-- Botón de crear -->
+          @if (user()?.role === 'client') {
           <button class="btn btn-primary shadow-lg shadow-primary/30 hover:-translate-y-0.5 transition-all"
             (click)="modalTicket.showModal()">
             <i class='bx bx-plus text-xl'></i>
             Nuevo Requerimiento
           </button>
+        }
         </div>
 
         <!-- LISTA DE TICKETS -->
@@ -98,9 +100,11 @@
             <i class='bx bx-folder-open text-5xl text-slate-400'></i>
           </div>
           <h3 class="text-xl font-bold text-slate-700">No tienes reportes activos</h3>
+          @if (user()?.role === 'client') {
           <p class="text-slate-500 mt-2 max-w-sm text-center">Tus requerimientos y problemas tecnológicos aparecerán
             aquí una vez los reportes.</p>
           <button class="btn btn-outline btn-primary mt-6" (click)="modalTicket.showModal()">Crear el primero</button>
+          }
         </div>
         } @else {
         <!-- Grid de Tarjetas -->
