@@ -22,6 +22,7 @@ export class UserDashboardComponent implements OnInit {
   public readonly TicketPriority = TicketPriority;
 
   public user = computed(() => this.authService.user());
+  public userRole = computed(() => this.authService.user()?.role);
 
   // Señales locales para guardar los datos de la base de datos
   public misTickets = signal<Ticket[]>([]);
@@ -78,5 +79,21 @@ crearTicket(titulo: string, descripcion: string, equipoId: string, category: str
 
   onLogout(){
     this.authService.logout();
+  }
+
+  tomarTicket(ticketId: string){
+    const miId = this.user()?.id;
+
+    if(!miId) return;
+
+    // Llamamos al servicio para asignarnos el ticket
+    this.ticketService.editarTicket(ticketId, { tecnicoId: miId}).
+    subscribe(exito => {
+      if(exito){
+        this.cargarDatos();
+      } else {
+        alert("Ocurrio un error al intentar tomar el ticket.")
+      }
+    });
   }
 }

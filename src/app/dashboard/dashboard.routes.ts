@@ -5,6 +5,7 @@ import { AdminTickets } from './pages/admin-tickets/admin-tickets';
 import { TicketDetailComponent } from './pages/ticket-detail/ticket-detail.component';
 import { AdminUsersComponent } from "./pages/admin-users/admin-users.component";
 import { AdminGuard } from "../auth/guards/admin.guard";
+import { AdminReportesComponent } from "./pages/admin-reportes/admin-reportes.component";
 
 export const dashboardRoutes: Routes = [
 
@@ -28,6 +29,10 @@ export const dashboardRoutes: Routes = [
       {
         path: 'equipos',
         loadComponent: () => import('./pages/admin-equipos/admin-equipos.component'),
+      },
+      {
+        path: 'reportes',
+        component: AdminReportesComponent
       },
 
       {

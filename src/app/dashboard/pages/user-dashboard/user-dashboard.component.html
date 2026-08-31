@@ -162,14 +162,24 @@
                 <i class='bx bx-message-rounded-dots text-base'></i>
                 <span>{{ ticket.comments ? ticket.comments.length : 0 }}</span>
               </div>
+              <!-- Zona de Botones -->
+              <div class="flex items-center gap-3">
+              <!-- Botón Tomar Caso (Solo para Técnicos, y si el ticket está huerfanito) -->
+              @if (userRole() === 'agent' && !ticket.tecnico) {
+                <button (click)="tomarTicket(ticket.id)"
+                class="btn btn-sm btn-primary text-white shadow-sm hover:scale-105 transition-transform">
+                <i class='bx bx-user-check'></i> Tomar Caso
+                </button>
+              }
 
-              <!-- Botón de Detalles -->
-                  <!-- Botón de Detalles (Le agregamos routerLink) -->
-    <button [routerLink]="['/dashboard/ticket', ticket.id]"
-            class="text-sm font-semibold text-primary/80 hover:text-primary transition-colors inline-flex
-  items-center gap-1">
-      Ver Detalles <i class='bx bx-right-arrow-alt text-lg'></i>
-    </button>
+
+
+              <button [routerLink]="['/dashboard/ticket', ticket.id]"
+              class="text-sm font-semibold text-primary/80 hover:text-primary transition-colors inline-flex items-center gap-1">
+              Ver Detalles
+              <i class='bx bx-right-arrow-alt text-lg'></i>
+              </button>
+              </div>
             </div>
           </div>
           }
