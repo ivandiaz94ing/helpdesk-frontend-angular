@@ -1,35 +1,96 @@
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden min-h-
-  [500px]">
+<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden min-h-[500px]">
 
-      <!-- Encabezado de la página -->
-      <div class="p-8 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start
-  sm:items-center gap-4 bg-slate-50/50">
+  <!-- Encabezado de la página -->
+  <div class="p-8 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
+    <div>
+      <h3 class="font-bold text-slate-800 text-2xl">Módulo de Reportería</h3>
+      <p class="text-sm text-slate-500 mt-1">Métricas, auditoría y exportación de datos logísticos.</p>
+    </div>
+
+    <!-- Botón de Exportar -->
+    <button (click)="exportarCSV()" class="btn bg-green-600 text-white hover:bg-green-700 shadow-lg shadow-green-600/30 border-0 transition-transform hover:-translate-y-0.5">
+      <i class='bx bx-spreadsheet text-xl'></i>
+      Exportar Historial (CSV)
+    </button>
+  </div>
+
+  <!-- Contenedor donde luego irán nuestras Tarjetas y Gráficas -->
+  <div class="p-8">
+
+    <!-- Filtro de Tiempo -->
+    <div class="flex justify-end mb-6">
+      <div class="join shadow-sm">
+        <div class="join-item flex items-center px-4 bg-slate-100 border border-slate-200 text-slate-500 font-semibold text-sm">
+          <i class='bx bx-calendar mr-2'></i> Periodo:
+        </div>
+        <select class="select select-bordered join-item focus:outline-none bg-white" (change)="cambiarFiltro($event)">
+          <option value="ALL">Todo el Historial</option>
+          <option value="CURRENT_MONTH">Este Mes</option>
+          <option value="LAST_MONTH">Mes Pasado</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tarjetas de Resumen -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+      <!-- Tarjeta 1: Total -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-3xl shadow-inner">
+          <i class='bx bx-layer'></i>
+        </div>
         <div>
-          <h3 class="font-bold text-slate-800 text-2xl">Módulo de Reportería</h3>
-          <p class="text-sm text-slate-500 mt-1">Métricas, auditoría y exportación de datos
-  logísticos.</p>
-        </div>
-
-        <!-- Botón de Exportar -->
-        <button (click)="exportarCSV()"
-                class="btn bg-green-600 text-white hover:bg-green-700 shadow-lg shadow-green-600/30
-  border-0 transition-transform hover:-translate-y-0.5">
-          <i class='bx bx-spreadsheet text-xl'></i>
-          Exportar Historial (CSV)
-        </button>
-      </div>
-
-      <!-- Contenedor donde luego irán nuestras Tarjetas y Gráficas -->
-      <div class="p-8">
-        <div class="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-16 text-center">
-          <div class="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4
-  shadow-sm">
-            <i class='bx bx-pie-chart-alt-2 text-3xl text-slate-400'></i>
-          </div>
-          <h4 class="text-lg font-bold text-slate-600">Gráficas en construcción</h4>
-          <p class="text-slate-400 mt-2 text-sm">Aquí colocaremos los indicadores visuales y el
-  filtro de meses.</p>
+          <p class="text-sm font-bold text-slate-400 uppercase tracking-wider">Total Tickets</p>
+          <h4 class="text-3xl font-black text-slate-700">{{ totalTickets() }}</h4>
         </div>
       </div>
 
-    </div> 
+      <!-- Tarjeta 2: Resueltos -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl shadow-inner">
+          <i class='bx bx-check-circle'></i>
+        </div>
+        <div>
+          <p class="text-sm font-bold text-slate-400 uppercase tracking-wider">Resueltos</p>
+          <h4 class="text-3xl font-black text-slate-700">{{ ticketsResueltos() }}</h4>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3: Pendientes -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-3xl shadow-inner">
+          <i class='bx bx-time-five'></i>
+        </div>
+        <div>
+          <p class="text-sm font-bold text-slate-400 uppercase tracking-wider">En Proceso / Abiertos</p>
+          <h4 class="text-3xl font-black text-slate-700">{{ ticketsPendientes() }}</h4>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Zona de Gráficas Chart.js -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
+
+      <!-- Gráfica 1: Torta (Categorías) -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center">
+        <h4 class="font-bold text-slate-600 mb-6 uppercase tracking-wider text-sm">Distribución por Categoría</h4>
+        <div class="w-full max-w-[300px]">
+          <!-- Etiqueta mágica de ng2-charts -->
+          <canvas baseChart [data]="pieChartData()" type="pie"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfica 2: Barras (Desempeño) -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center">
+        <h4 class="font-bold text-slate-600 mb-6 uppercase tracking-wider text-sm">Desempeño de Soluciones</h4>
+        <div class="w-full">
+          <!-- Etiqueta mágica de ng2-charts -->
+          <canvas baseChart [data]="barChartData()" type="bar"></canvas>
+        </div>
+      </div>
+
+    </div>      
+
+  </div>
+</div>

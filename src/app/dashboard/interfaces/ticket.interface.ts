@@ -6,10 +6,10 @@
     }
 
     export enum TicketCategory {
-      FALLA_RED = 'FALLA_RED',
-      HARDWARE = 'HARDWARE',
-      SOFTWARE = 'SOFTWARE',
-      OTROS = 'OTROS'
+      FALLA_RED = 'Falla_de_red',
+      HARDWARE = 'Hardware_dañado',
+      SOFTWARE = 'Solicitud_de_software',
+      OTROS = 'Otros'
     }
 
     export enum TicketStatus {
@@ -49,6 +49,7 @@
       id: string;
       title: string;
       description: string;
+      images: string[];
       priority: TicketPriority;
       category: TicketCategory;
       status: TicketStatus;

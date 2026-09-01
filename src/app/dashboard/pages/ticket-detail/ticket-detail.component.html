@@ -67,6 +67,34 @@
               </p>
             </div>
           </div>
+          <!-- Sección de Evidencia Fotográfica -->
+    @if (ticket()?.images && ticket()!.images.length > 0) {
+      <div class="mt-8 pt-6 border-t border-slate-100">
+
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <i class='bx bx-images text-primary text-xl'></i>
+          Evidencia Fotográfica Adjunta
+        </h3>
+
+        <!-- Cuadrícula de fotos -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          @for(img of ticket()!.images; track img) {
+
+            <!-- Envolvemos la imagen en un enlace para que al darle clic se abra en grande en otra
+  pestaña -->
+            <a [href]="img" target="_blank" rel="noopener noreferrer"
+               class="block rounded-lg overflow-hidden border border-slate-200 shadow-sm
+  hover:shadow-md transition-all group cursor-pointer">
+              <img [src]="img" alt="Evidencia del ticket"
+                   class="w-full h-28 object-cover group-hover:scale-110 transition-transform
+  duration-300">
+            </a>
+
+          }
+        </div>
+
+      </div>
+    }   
 
           <!-- Card Comentarios (Placeholder para el futuro) -->
                          <!-- Card Comentarios (Chat) -->
