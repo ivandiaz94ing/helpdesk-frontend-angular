@@ -6,6 +6,7 @@ import { TicketDetailComponent } from './pages/ticket-detail/ticket-detail.compo
 import { AdminUsersComponent } from "./pages/admin-users/admin-users.component";
 import { AdminGuard } from "../auth/guards/admin.guard";
 import { AdminReportesComponent } from "./pages/admin-reportes/admin-reportes.component";
+import { ProfileComponent } from "./pages/profile/profile.component";
 
 export const dashboardRoutes: Routes = [
 
@@ -35,6 +36,7 @@ export const dashboardRoutes: Routes = [
         component: AdminReportesComponent
       },
 
+
       {
         path: '',
         pathMatch: 'full',
@@ -45,6 +47,10 @@ export const dashboardRoutes: Routes = [
   {
     path: 'ticket/:id', // Ruta para ver los detalles de un ticket específico
     component: TicketDetailComponent,
+  },
+  {
+    path: 'perfil',
+    component: ProfileComponent
   },
   {
     path: '',
