@@ -1,20 +1,20 @@
-import { User } from "../../auth/interfaces/user.interface";
+import { User } from '../../auth/interfaces/user.interface';
 
 export interface Equipo {
-  id: string;               // Lo genera la base de datos
+  id: string; // Lo genera la base de datos
   nombre: string;
   modelo: string;
   marca: string;
   numeroSerie: string;
   isActive: boolean;
-  user: User
-  }
+  user: User;
+}
 
 export interface CreateEquipoDto {
   nombre: string;
   modelo: string;
   marca: string;
   numeroSerie: string;
-  usuarioResponsableId: string,
+  usuarioResponsableId: string;
   isActive: boolean;
-  }
+}

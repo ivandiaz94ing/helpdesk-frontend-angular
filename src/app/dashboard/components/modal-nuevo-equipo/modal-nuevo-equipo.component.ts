@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EquipoService } from '../../services/equipo.service';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -28,28 +35,30 @@ export class ModalNuevoEquipoComponent implements OnInit {
     marca: ['', [Validators.required]],
     numeroSerie: ['', [Validators.required, Validators.minLength(5)]],
     usuarioResponsableId: ['', [Validators.required]],
-    isActive: [true] // Por defecto, al crearse está activo
+    isActive: [true], // Por defecto, al crearse está activo
   });
 
   //Al abrir el modal se cargan los usuarios
   ngOnInit(): void {
-    this.authService.getUsers().subscribe(users => {
+    this.authService.getUsers().subscribe((users) => {
       this.listaUsuarios.set(users);
     });
   }
 
-  crearEquipo(){
-    if(this.crearEquipoForm.invalid) return;
+  crearEquipo() {
+    if (this.crearEquipoForm.invalid) return;
 
     const datosNuevos = this.crearEquipoForm.value as CreateEquipoDto;
 
-    this.equipoService.crearEquipo(datosNuevos).subscribe(exito =>{
-      if(exito){
-        const modal = document.getElementById('modalNuevoEquipo') as HTMLDialogElement;
+    this.equipoService.crearEquipo(datosNuevos).subscribe((exito) => {
+      if (exito) {
+        const modal = document.getElementById(
+          'modalNuevoEquipo',
+        ) as HTMLDialogElement;
         modal.close();
 
         this.equipoCreadoExito.emit();
-        this.crearEquipoForm.reset({ isActive: true});
+        this.crearEquipoForm.reset({ isActive: true });
       } else {
         alert('Error al crear el equipo');
       }

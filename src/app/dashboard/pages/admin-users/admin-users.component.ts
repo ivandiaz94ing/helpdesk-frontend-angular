@@ -1,11 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../auth/services/auth.service';
 import { User } from '../../../auth/interfaces/user.interface';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ModalNuevoUsuarioComponent } from "../../components/modal-nuevo-usuario/modal-nuevo-usuario.component";
-import { ModalEditarUsuarioComponent } from "../../components/modal-editar-usuario/modal-editar-usuario.component";
-import { ModalConfirmacionComponent } from "../../../shared/components/modal-confirmacion/modal-confirmacion.component";
+import { ModalNuevoUsuarioComponent } from '../../components/modal-nuevo-usuario/modal-nuevo-usuario.component';
+import { ModalEditarUsuarioComponent } from '../../components/modal-editar-usuario/modal-editar-usuario.component';
+import { ModalConfirmacionComponent } from '../../../shared/components/modal-confirmacion/modal-confirmacion.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -14,14 +21,13 @@ import { ModalConfirmacionComponent } from "../../../shared/components/modal-con
     ReactiveFormsModule,
     ModalNuevoUsuarioComponent,
     ModalEditarUsuarioComponent,
-    ModalConfirmacionComponent
-],
+    ModalConfirmacionComponent,
+  ],
   templateUrl: './admin-users.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminUsersComponent implements OnInit {
   private authService = inject(AuthService);
-
 
   // Señal para recordar a quien voy a eliminar
   public usuarioAEliminar = signal<{ id: string; nombre: string } | null>(null);
@@ -42,16 +48,19 @@ export class AdminUsersComponent implements OnInit {
     if (!termino) return lista;
 
     // Si escribiste algo, filtramos por nombre o correo
-    return lista.filter(user =>
-      user.fullname.toLowerCase().includes(termino) ||
-      user.email.toLowerCase().includes(termino)
+    return lista.filter(
+      (user) =>
+        user.fullname.toLowerCase().includes(termino) ||
+        user.email.toLowerCase().includes(termino),
     );
   });
 
   abrirModalNuevo() {
-        const modal = document.getElementById('modalNuevoUsuario') as HTMLDialogElement;
-        modal.showModal();
-      }
+    const modal = document.getElementById(
+      'modalNuevoUsuario',
+    ) as HTMLDialogElement;
+    modal.showModal();
+  }
 
   // 4. Función para actualizar el término desde el HTML
   buscar(texto: string) {
@@ -63,12 +72,12 @@ export class AdminUsersComponent implements OnInit {
     this.cargarUsuarios();
   }
   cargarUsuarios() {
-    this.authService.getUsers().subscribe(users => {
+    this.authService.getUsers().subscribe((users) => {
       this.usuariosOriginales.set(users);
     });
   }
   prepararEliminarUsuario(id: string, nombre: string) {
-    this.usuarioAEliminar.set({ id , nombre});
+    this.usuarioAEliminar.set({ id, nombre });
     // Uso document.getElementById para abrir el modal desde TS
     const modal = document.getElementById('modalEliminar') as HTMLDialogElement;
     modal.showModal();
@@ -77,7 +86,9 @@ export class AdminUsersComponent implements OnInit {
   prepararEdicion(usuario: User) {
     this.usuarioAEditar.set(usuario);
     // Uso document.getElementById para abrir el modal desde TS
-    const modal = document.getElementById('modalEditarUsuario') as HTMLDialogElement;
+    const modal = document.getElementById(
+      'modalEditarUsuario',
+    ) as HTMLDialogElement;
     modal.showModal();
   }
 
@@ -85,26 +96,14 @@ export class AdminUsersComponent implements OnInit {
     const usuarioId = this.usuarioAEliminar()?.id;
     if (!usuarioId) return;
 
-    this.authService.eliminarUsuarioAdmin(usuarioId).subscribe(exito => {
+    this.authService.eliminarUsuarioAdmin(usuarioId).subscribe((exito) => {
       if (exito) {
         this.cargarUsuarios(); // Solo recargamos la tabla, el modal ya se cerró
       } else {
-        alert("Hubo un error al eliminar el usuario");
+        alert('Hubo un error al eliminar el usuario');
       }
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-    //Paso el nuevo parametro al servicio
-  }
-
+  //Paso el nuevo parametro al servicio
+}

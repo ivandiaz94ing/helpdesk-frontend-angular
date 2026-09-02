@@ -1,7 +1,18 @@
 import { CommonModule } from '@angular/common';
- import { TicketService } from '../../services/ticket.service';
-import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
-import { Ticket, TicketPriority, TicketStatus } from '../../interfaces/ticket.interface';
+import { TicketService } from '../../services/ticket.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import {
+  Ticket,
+  TicketPriority,
+  TicketStatus,
+} from '../../interfaces/ticket.interface';
 import { RouterLink } from '@angular/router';
 import { ModalConfirmacionComponent } from '../../../shared/components/modal-confirmacion/modal-confirmacion.component';
 
@@ -77,7 +88,9 @@ export class AdminTickets implements OnInit {
 
     this.ticketService.eliminarTicket(id).subscribe((exito) => {
       if (exito) {
-        this.ticketsOriginales.update((current) => current.filter((t) => t.id !== id));
+        this.ticketsOriginales.update((current) =>
+          current.filter((t) => t.id !== id),
+        );
         this.ticketAEliminar.set(null);
       } else {
         alert('Hubo un problema al intentar eliminar el ticket.');

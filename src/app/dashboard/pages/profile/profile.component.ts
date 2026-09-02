@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -12,7 +17,6 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent {
-
   public authService = inject(AuthService);
   private router = inject(Router);
 
@@ -44,9 +48,9 @@ export class ProfileComponent {
     alert('¡Validación exitosa! Falta conectar con NestJS.');
   }
 
-  volver(){
+  volver() {
     const userRole = this.user()?.role;
-    console.log({userRole});
+    console.log({ userRole });
 
     // Si es Admin o Técnico, lo mandamos a la tabla de tickets
     if (userRole === 'admin' || userRole === 'agent') {

@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 
 export const AdminGuard: CanMatchFn = async (
   route: Route,
-  segments: UrlSegment[]
+  segments: UrlSegment[],
 ) => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -26,5 +26,4 @@ export const AdminGuard: CanMatchFn = async (
   }
   // Si pasa las dos pruebas, bienvenido señor Administrador
   return true;
-
 };

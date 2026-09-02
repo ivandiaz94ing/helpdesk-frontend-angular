@@ -1,14 +1,26 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Equipo } from '../../interfaces/ticket.interface';
 import { EquipoService } from '../../services/equipo.service';
-import { ModalNuevoEquipoComponent } from "../../components/modal-nuevo-equipo/modal-nuevo-equipo.component";
-import { ModalConfirmacionComponent } from "../../../shared/components/modal-confirmacion/modal-confirmacion.component";
-import { ModalEditarEquipoComponent } from "../../components/modal-editar-equipo/modal-editar-equipo.component";
+import { ModalNuevoEquipoComponent } from '../../components/modal-nuevo-equipo/modal-nuevo-equipo.component';
+import { ModalConfirmacionComponent } from '../../../shared/components/modal-confirmacion/modal-confirmacion.component';
+import { ModalEditarEquipoComponent } from '../../components/modal-editar-equipo/modal-editar-equipo.component';
 
 @Component({
   selector: 'app-admin-equipos',
-  imports: [CommonModule, ModalNuevoEquipoComponent, ModalConfirmacionComponent, ModalEditarEquipoComponent],
+  imports: [
+    CommonModule,
+    ModalNuevoEquipoComponent,
+    ModalConfirmacionComponent,
+    ModalEditarEquipoComponent,
+  ],
   templateUrl: './admin-equipos.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -17,15 +29,14 @@ export default class AdminEquiposComponent implements OnInit {
   private equipoService = inject(EquipoService);
 
   // Señal para recordar a quien voy a eliminar
-    public equipoAEliminar = signal<{ id: string; nombre: string } | null>(null);
-    public equipoAEditar = signal< Equipo | null>(null);
+  public equipoAEliminar = signal<{ id: string; nombre: string } | null>(null);
+  public equipoAEditar = signal<Equipo | null>(null);
 
   // Término de búsqueda
   public terminoBusqueda = signal('');
 
   //Lista de equipos
   public equiposOriginales = signal<Equipo[]>([]);
-
 
   // Filtro reactivo mágico
   public equiposFiltrados = computed(() => {
@@ -34,10 +45,11 @@ export default class AdminEquiposComponent implements OnInit {
 
     if (!termino) return lista;
 
-    return lista.filter(eq =>
-      eq.nombre.toLowerCase().includes(termino) ||
-      eq.numeroSerie.toLowerCase().includes(termino) ||
-      eq.marca.toLowerCase().includes(termino)
+    return lista.filter(
+      (eq) =>
+        eq.nombre.toLowerCase().includes(termino) ||
+        eq.numeroSerie.toLowerCase().includes(termino) ||
+        eq.marca.toLowerCase().includes(termino),
     );
   });
 
@@ -46,8 +58,8 @@ export default class AdminEquiposComponent implements OnInit {
     this.cargarEquipos();
   }
 
-  cargarEquipos(){
-    this.equipoService.getEquipos().subscribe(equiposBack => {
+  cargarEquipos() {
+    this.equipoService.getEquipos().subscribe((equiposBack) => {
       this.equiposOriginales.set(equiposBack);
     });
   }
@@ -58,30 +70,36 @@ export default class AdminEquiposComponent implements OnInit {
 
   // Las funciones de los modales (las conectaremos en el siguiente paso)
   abrirModalNuevo() {
-    const modal = document.getElementById('modalNuevoEquipo') as HTMLDialogElement;
+    const modal = document.getElementById(
+      'modalNuevoEquipo',
+    ) as HTMLDialogElement;
     modal.showModal();
   }
 
   prepararEdicion(equipo: Equipo) {
     this.equipoAEditar.set(equipo);
-    const modal = document.getElementById('modalEditarEquipo') as HTMLDialogElement;
+    const modal = document.getElementById(
+      'modalEditarEquipo',
+    ) as HTMLDialogElement;
     modal.show();
   }
 
   prepararEliminar(id: string, nombre: string) {
-    this.equipoAEliminar.set({id, nombre});
-    const modal = document.getElementById('modalEliminarEquipo') as HTMLDialogElement;
+    this.equipoAEliminar.set({ id, nombre });
+    const modal = document.getElementById(
+      'modalEliminarEquipo',
+    ) as HTMLDialogElement;
     modal.show();
   }
 
   eliminarEquipo() {
-  const equipoId = this.equipoAEliminar()?.id;
-  if (!equipoId) return;
-      this.equipoService.eliminarEquipo(equipoId).subscribe(exito => {
+    const equipoId = this.equipoAEliminar()?.id;
+    if (!equipoId) return;
+    this.equipoService.eliminarEquipo(equipoId).subscribe((exito) => {
       if (exito) {
         this.cargarEquipos();
       } else {
-        alert("Hubo un error al eliminar el usuario");
+        alert('Hubo un error al eliminar el usuario');
       }
     });
   }

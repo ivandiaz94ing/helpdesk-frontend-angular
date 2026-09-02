@@ -1,37 +1,52 @@
 <div class="flex min-h-screen">
   <!-- Mitad Izquierda: Imagen y Marca (Se oculta en celulares para no estorbar) -->
-  <div class="hidden lg:flex lg:w-3/5 relative bg-neutral text-neutral-content items-center justify-center overflow-hidden">
+  <div
+    class="hidden lg:flex lg:w-3/5 relative bg-neutral text-neutral-content items-center justify-center overflow-hidden"
+  >
     <!-- Imagen de fondo -->
     <div class="absolute inset-0 z-0">
-      <img src="/login-bg.jpg" alt="Background Telemática" class="w-full h-full object-cover opacity-50" />
-      <div class="absolute inset-0 bg-gradient-to-r from-base-300/90 to-transparent"></div>
+      <img
+        src="/login-bg.jpg"
+        alt="Background Telemática"
+        class="w-full h-full object-cover opacity-50"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-base-300/90 to-transparent"
+      ></div>
     </div>
 
     <!-- Texto sobre la imagen -->
     <div class="relative z-10 w-full max-w-2xl p-12">
       <div class="avatar placeholder mb-6">
-        <div class="bg-primary text-primary-content rounded-2xl w-24 shadow-2xl">
+        <div
+          class="bg-primary text-primary-content rounded-2xl w-24 shadow-2xl"
+        >
           <span class="text-4xl">🛠️</span>
         </div>
       </div>
-      <h1 class="text-5xl font-extrabold mb-4 tracking-tight text-white drop-shadow-lg">
+      <h1
+        class="text-5xl font-extrabold mb-4 tracking-tight text-white drop-shadow-lg"
+      >
         Mesa de Ayudas <span class="text-primary">Telemática</span>
       </h1>
       <p class="text-xl text-gray-300 font-light max-w-lg drop-shadow-md">
-        Sistema centralizado para el reporte y gestión de incidencias tecnológicas del Batallón.
-        Rápido, seguro y eficiente.
+        Sistema centralizado para el reporte y gestión de incidencias
+        tecnológicas del Batallón. Rápido, seguro y eficiente.
       </p>
     </div>
   </div>
 
   <!-- Mitad Derecha: Formulario de Registro -->
-  <div class="w-full lg:w-2/5 flex items-center justify-center bg-base-100 p-8 sm:p-12 shadow-[-20px_0_30px_-15px_rgba(0,0,0,0.1)] z-20">
+  <div
+    class="w-full lg:w-2/5 flex items-center justify-center bg-base-100 p-8 sm:p-12 shadow-[-20px_0_30px_-15px_rgba(0,0,0,0.1)] z-20"
+  >
     <div class="w-full max-w-md">
-
       <!-- Título para versión móvil (solo se ve en pantallas pequeñas) -->
       <div class="flex lg:hidden flex-col items-center mb-8">
         <div class="avatar placeholder mb-4">
-          <div class="bg-primary text-primary-content rounded-xl w-16 shadow-lg">
+          <div
+            class="bg-primary text-primary-content rounded-xl w-16 shadow-lg"
+          >
             <span class="text-2xl">🛠️</span>
           </div>
         </div>
@@ -40,76 +55,136 @@
 
       <!-- Texto de Bienvenida -->
       <div class="mb-10">
-        <h2 class="text-3xl font-bold text-base-content mb-2">Crear una cuenta</h2>
-        <p class="text-base-content/60">Ingresa tus datos para registrarte en el sistema.</p>
+        <h2 class="text-3xl font-bold text-base-content mb-2">
+          Crear una cuenta
+        </h2>
+        <p class="text-base-content/60">
+          Ingresa tus datos para registrarte en el sistema.
+        </p>
       </div>
 
       <!-- FORMULARIO DE REGISTRO -->
       <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-
         <!-- Nombre Completo -->
         <div class="form-control w-full mb-5">
           <label class="label">
-            <span class="label-text font-medium text-base-content/80">Nombre Completo</span>
+            <span class="label-text font-medium text-base-content/80"
+              >Nombre Completo</span
+            >
           </label>
-          <label class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all">
-            <i class='bx bx-user text-xl opacity-50'></i>
-            <input type="text" formControlName="fullname" class="grow" placeholder="Ej: Funcionario Batallón" />
+          <label
+            class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all"
+          >
+            <i class="bx bx-user text-xl opacity-50"></i>
+            <input
+              type="text"
+              formControlName="fullname"
+              class="grow"
+              placeholder="Ej: Funcionario Batallón"
+            />
           </label>
-          @if(registerForm.get('fullname')?.invalid && registerForm.get('fullname')?.touched) {
-            <span class="label-text-alt text-error mt-1">El nombre debe tener al menos 3 caracteres.</span>
+          @if (
+            registerForm.get("fullname")?.invalid &&
+            registerForm.get("fullname")?.touched
+          ) {
+            <span class="label-text-alt text-error mt-1"
+              >El nombre debe tener al menos 3 caracteres.</span
+            >
           }
         </div>
 
         <!-- Correo Electrónico -->
         <div class="form-control w-full mb-5">
           <label class="label">
-            <span class="label-text font-medium text-base-content/80">Correo Electrónico</span>
+            <span class="label-text font-medium text-base-content/80"
+              >Correo Electrónico</span
+            >
           </label>
-          <label class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all">
-            <i class='bx bx-envelope text-xl opacity-50'></i>
-            <input type="email" formControlName="email" class="grow" placeholder="usuario@ejercito.mil.co" />
+          <label
+            class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all"
+          >
+            <i class="bx bx-envelope text-xl opacity-50"></i>
+            <input
+              type="email"
+              formControlName="email"
+              class="grow"
+              placeholder="usuario@ejercito.mil.co"
+            />
           </label>
-          @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-            <span class="label-text-alt text-error mt-1">Ingrese un correo válido.</span>
+          @if (
+            registerForm.get("email")?.invalid &&
+            registerForm.get("email")?.touched
+          ) {
+            <span class="label-text-alt text-error mt-1"
+              >Ingrese un correo válido.</span
+            >
           }
         </div>
 
         <!-- Contraseña -->
         <div class="form-control w-full mb-6">
           <label class="label">
-            <span class="label-text font-medium text-base-content/80">Contraseña</span>
+            <span class="label-text font-medium text-base-content/80"
+              >Contraseña</span
+            >
           </label>
-          <label class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all">
-            <i class='bx bx-key text-xl opacity-50'></i>
-            <input type="password" formControlName="password" class="grow" placeholder="••••••••" />
+          <label
+            class="input input-bordered flex items-center gap-3 focus-within:outline-primary bg-base-200/50 transition-all"
+          >
+            <i class="bx bx-key text-xl opacity-50"></i>
+            <input
+              type="password"
+              formControlName="password"
+              class="grow"
+              placeholder="••••••••"
+            />
           </label>
-          @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-            <span class="label-text-alt text-error mt-1">Mínimo 6 caracteres requeridos.</span>
+          @if (
+            registerForm.get("password")?.invalid &&
+            registerForm.get("password")?.touched
+          ) {
+            <span class="label-text-alt text-error mt-1"
+              >Mínimo 6 caracteres requeridos.</span
+            >
           }
         </div>
 
         <div class="form-control mt-8">
           <!-- Botón de registro -->
-          <button type="submit" class="btn btn-primary shadow-lg shadow-primary/30 hover:shadow-xl hover:-translate-y-0.5 transition-all w-full text-lg">
+          <button
+            type="submit"
+            class="btn btn-primary shadow-lg shadow-primary/30 hover:shadow-xl hover:-translate-y-0.5 transition-all w-full text-lg"
+          >
             Registrarme
           </button>
         </div>
 
-        @if(hasError()) {
-        <div role="alert" class="alert alert-error mt-4">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span>Error al procesar el registro. Intente de nuevo.</span>
-        </div>
+        @if (hasError()) {
+          <div role="alert" class="alert alert-error mt-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 shrink-0 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Error al procesar el registro. Intente de nuevo.</span>
+          </div>
         }
-
       </form>
 
       <!-- Enlace a Login -->
       <div class="mt-8 text-center text-base-content/80">
-        ¿Ya tienes cuenta? <a routerLink="/auth/login" class="link link-primary font-semibold">Inicia sesión aquí</a>
+        ¿Ya tienes cuenta?
+        <a routerLink="/auth/login" class="link link-primary font-semibold"
+          >Inicia sesión aquí</a
+        >
       </div>
 
       <!-- Footer Info -->

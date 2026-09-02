@@ -1,5 +1,10 @@
-import { HttpEvent, HttpEventType, HttpHandlerFn, HttpRequest } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import {
+  HttpEvent,
+  HttpEventType,
+  HttpHandlerFn,
+  HttpRequest,
+} from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
 export function loggingInterceptor(
   req: HttpRequest<unknown>,

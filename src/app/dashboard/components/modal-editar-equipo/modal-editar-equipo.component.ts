@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, output, signal, effect, OnInit, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  output,
+  signal,
+  effect,
+  OnInit,
+  input,
+} from '@angular/core';
 import { Equipo } from '../../interfaces/ticket.interface';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/services/auth.service';
@@ -24,16 +33,15 @@ export class ModalEditarEquipoComponent implements OnInit {
           marca: equipo.marca,
           numeroSerie: equipo.numeroSerie,
           isActive: equipo.isActive,
-          usuarioResponsableId: equipo.user?.id
+          usuarioResponsableId: equipo.user?.id,
         });
       }
     });
   }
 
   ngOnInit(): void {
-    this.authService.getUsers().subscribe(users =>{
+    this.authService.getUsers().subscribe((users) => {
       this.listaUsuarios.set(users);
-
     });
   }
   public equipo = input<Equipo | null>(null);
@@ -54,26 +62,30 @@ export class ModalEditarEquipoComponent implements OnInit {
     isActive: [true, [Validators.required]],
   });
 
-  guardarEdicion(){
-    if(this.editarEquipoForm.invalid) return;
+  guardarEdicion() {
+    if (this.editarEquipoForm.invalid) return;
 
     // Extrae el ID del equipo que estamos editando actualmente
     const equipoId = this.equipo()?.id;
-    if(!equipoId) return;
+    if (!equipoId) return;
 
-    const datosActualizados = this.editarEquipoForm.value as Partial<CreateEquipoDto>;
+    const datosActualizados = this.editarEquipoForm
+      .value as Partial<CreateEquipoDto>;
 
-    this.equipoService.editarEquipo(equipoId, datosActualizados).subscribe(exito =>{
-      if(exito){
-        //Cierro el modal
-        const modal = document.getElementById('modalEditarEquipo') as HTMLDialogElement;
-        if(modal) modal.close();
-        // ¡Grito éxito para que la tabla principal se recargue!
-        this.equipoEditadoExito.emit();
-      }else{
-        alert("Hubo un error al actualizar el equipo");
-      }
-    });
+    this.equipoService
+      .editarEquipo(equipoId, datosActualizados)
+      .subscribe((exito) => {
+        if (exito) {
+          //Cierro el modal
+          const modal = document.getElementById(
+            'modalEditarEquipo',
+          ) as HTMLDialogElement;
+          if (modal) modal.close();
+          // ¡Grito éxito para que la tabla principal se recargue!
+          this.equipoEditadoExito.emit();
+        } else {
+          alert('Hubo un error al actualizar el equipo');
+        }
+      });
   }
-
 }

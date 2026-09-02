@@ -5,11 +5,10 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ ReactiveFormsModule, RouterLink ],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
 })
 export class Login {
-
   fb = inject(FormBuilder);
   hasError = signal(false);
   isPosting = signal(false);
@@ -22,7 +21,6 @@ export class Login {
   //     this.router.navigate(['/dashboard/app-user-dashboard']);
   //   }
   // }
-
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -37,14 +35,14 @@ export class Login {
       }, 1500);
       return;
     }
-    const { email='', password='' } = this.loginForm.value;
+    const { email = '', password = '' } = this.loginForm.value;
 
-    this.authService.login(email!, password!).subscribe( (isAuthenticated) => {
+    this.authService.login(email!, password!).subscribe((isAuthenticated) => {
       if (isAuthenticated) {
         const usuarioActual = this.authService.user();
-        console.log("Datos del usuario:", usuarioActual); // <-- Agrega esto
+        console.log('Datos del usuario:', usuarioActual); // <-- Agrega esto
         if (usuarioActual && usuarioActual.role === 'admin') {
-        this.router.navigate(['/dashboard/app-admin-dashboard']);
+          this.router.navigate(['/dashboard/app-admin-dashboard']);
         } else {
           this.router.navigate(['/dashboard/app-user-dashboard']);
         }
@@ -55,7 +53,6 @@ export class Login {
       setTimeout(() => {
         this.hasError.set(false);
       }, 1500);
-
     });
   }
 }

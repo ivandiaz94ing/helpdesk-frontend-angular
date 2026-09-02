@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 
 type AuthStatus = 'checking' | 'authenticated' | 'not-authenticated';
 // const baseUrl = 'http://localhost:3000/';
-const baseUrl = 'https://helpdesk-backend-api-54750791481.southamerica-east1.run.app/';
+const baseUrl =
+  'https://helpdesk-backend-api-54750791481.southamerica-east1.run.app/';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private _authStatus = signal<AuthStatus>('checking');
@@ -52,7 +53,6 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-
   // Check Autentication
   checkAuthStatus(): Observable<boolean> {
     const token = localStorage.getItem('token');
@@ -74,7 +74,7 @@ export class AuthService {
       );
   }
 
-  private handleAuthSuccess({user, token}: AuthResponse) {
+  private handleAuthSuccess({ user, token }: AuthResponse) {
     this._user.set(user);
     this._token.set(token);
     this._authStatus.set('authenticated');
@@ -94,24 +94,34 @@ export class AuthService {
   }
 
   // CREAR USUARIO DESDE EL PANEL ADMIN (Sin iniciar sesión)
-  crearUsuarioAdmin(fullname: string, email: string, password: string, rol: string): Observable<boolean> {
-    return this.http.post<User>(`${baseUrl}user/register-admin`, {
-      fullname,
-      email,
-      password,
-      role: rol
-    }).pipe(
-      map(() => true), // Si todo sale bien, devolvemos verdadero
-      catchError((err) => {
-        console.error('Error creando usuario:', err);
-        return of(false);
+  crearUsuarioAdmin(
+    fullname: string,
+    email: string,
+    password: string,
+    rol: string,
+  ): Observable<boolean> {
+    return this.http
+      .post<User>(`${baseUrl}user/register-admin`, {
+        fullname,
+        email,
+        password,
+        role: rol,
       })
-    );
+      .pipe(
+        map(() => true), // Si todo sale bien, devolvemos verdadero
+        catchError((err) => {
+          console.error('Error creando usuario:', err);
+          return of(false);
+        }),
+      );
   }
 
-
   // Register
-  register(fullname: string, email: string, password: string): Observable<boolean> {
+  register(
+    fullname: string,
+    email: string,
+    password: string,
+  ): Observable<boolean> {
     return this.http
       .post<AuthResponse>(`${baseUrl}user/register`, {
         fullname: fullname,
@@ -126,15 +136,16 @@ export class AuthService {
 
   // EDITAR USUARIO
   editarUsuarioAdmin(id: string, datosActualizados: any): Observable<boolean> {
-    return this.http.patch<User>(`${baseUrl}user/${id}`, datosActualizados).pipe(
-      map(() => true),
-      catchError((err) => {
-        console.error('Error al editar usuario:', err);
-        return of(false);
-      })
-    );
+    return this.http
+      .patch<User>(`${baseUrl}user/${id}`, datosActualizados)
+      .pipe(
+        map(() => true),
+        catchError((err) => {
+          console.error('Error al editar usuario:', err);
+          return of(false);
+        }),
+      );
   }
-
 
   // ELIMINAR USUARIO DESDE EL PANEL ADMIN
   eliminarUsuarioAdmin(userId: string): Observable<boolean> {
@@ -143,7 +154,7 @@ export class AuthService {
       catchError((err) => {
         console.error('Error al eliminar usuario:', err);
         return of(false);
-      })
+      }),
     );
   }
 
@@ -152,7 +163,7 @@ export class AuthService {
     return of(false);
   }
 
-  private clearSession(){
+  private clearSession() {
     this._user.set(null);
     this._token.set(null);
     this._authStatus.set('not-authenticated');

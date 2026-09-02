@@ -6,4 +6,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   templateUrl: './modal-eliminar-equipo.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ModalEliminarEquipoComponent { }
+export class ModalEliminarEquipoComponent {}

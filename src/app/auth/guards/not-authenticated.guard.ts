@@ -5,16 +5,19 @@ import { firstValueFrom } from 'rxjs';
 
 export const NotAuthenticatedGuard: CanMatchFn = async (
   route: Route,
-  segments: UrlSegment[]
+  segments: UrlSegment[],
 ) => {
   const authService = inject(AuthService);
-  const router      = inject(Router);
+  const router = inject(Router);
 
   // Esperamos la respuesta de tu backend / localStorage
   const isAuthenticated = await firstValueFrom(authService.checkAuthStatus());
 
   // 1. IMPRIMIMOS EL RESULTADO AQUÍ PARA DEPURAR
-  console.log('Evaluando NotAuthenticatedGuard. ¿Está logueado?:', isAuthenticated);
+  console.log(
+    'Evaluando NotAuthenticatedGuard. ¿Está logueado?:',
+    isAuthenticated,
+  );
 
   if (isAuthenticated) {
     // Si ya está logueado, lo sacamos de esta ruta (ej: del Login) y lo mandamos al dashboard

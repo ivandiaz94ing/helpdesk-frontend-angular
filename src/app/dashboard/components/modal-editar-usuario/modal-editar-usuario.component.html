@@ -1,53 +1,86 @@
- <dialog id="modalEditarUsuario" class="modal">
-      <div class="modal-box bg-white rounded-2xl shadow-2xl">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="font-bold text-xl text-slate-800">Editar Funcionario</h3>
-          <button type="button" class="btn btn-sm btn-circle btn-ghost text-slate-400"
-  onclick="modalEditarUsuario.close()">
-            <i class='bx bx-x text-2xl'></i>
-          </button>
-        </div>
+<dialog id="modalEditarUsuario" class="modal">
+  <div class="modal-box bg-white rounded-2xl shadow-2xl">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="font-bold text-xl text-slate-800">Editar Funcionario</h3>
+      <button
+        type="button"
+        class="btn btn-sm btn-circle btn-ghost text-slate-400"
+        onclick="modalEditarUsuario.close()"
+      >
+        <i class="bx bx-x text-2xl"></i>
+      </button>
+    </div>
 
-        <!-- NUESTRO FORMULARIO REACTIVO -->
-        <form [formGroup]="editarUsuarioForm" (ngSubmit)="guardarEdicion()">
-
-          <!-- Nombre Completo -->
-          <div class="form-control w-full mb-4">
-            <label class="label"><span class="label-text font-semibold text-slate-600">Nombre
-  Completo</span></label>
-            <input formControlName="fullname" type="text" class="input input-bordered w-full bg-slate-50" />
-          </div>
-
-          <!-- Correo Institucional -->
-          <div class="form-control w-full mb-4">
-            <label class="label"><span class="label-text font-semibold text-slate-600">Correo
-  Institucional</span></label>
-            <input formControlName="email" type="email" class="input input-bordered w-full bg-slate-50" />
-          </div>
-
-          <!-- Rol -->
-          <div class="form-control w-full mb-6">
-            <label class="label"><span class="label-text font-semibold text-slate-600">Rol en el
-  Sistema</span></label>
-            <select formControlName="role" class="select select-bordered w-full bg-slate-50">
-              <option value="client">Funcionario Regular (Cliente)</option>
-              <option value="agent">Tecnico (Agente)</option>
-              <option value="admin">Administrador (Control Total)</option>
-            </select>
-          </div>
-
-          <!-- Botones -->
-          <div class="modal-action mt-2 flex gap-2 justify-end">
-            <button type="button" class="btn btn-ghost text-slate-500 font-semibold"
-  onclick="modalEditarUsuario.close()">Cancelar</button>
-            <button type="submit" class="btn btn-primary px-8 shadow-lg shadow-primary/30"
-  [disabled]="editarUsuarioForm.invalid">
-              Actualizar
-            </button>
-          </div>
-
-        </form>
+    <!-- NUESTRO FORMULARIO REACTIVO -->
+    <form [formGroup]="editarUsuarioForm" (ngSubmit)="guardarEdicion()">
+      <!-- Nombre Completo -->
+      <div class="form-control w-full mb-4">
+        <label class="label"
+          ><span class="label-text font-semibold text-slate-600"
+            >Nombre Completo</span
+          ></label
+        >
+        <input
+          formControlName="fullname"
+          type="text"
+          class="input input-bordered w-full bg-slate-50"
+        />
       </div>
-      <form method="dialog" class="modal-backdrop bg-slate-900/40 backdrop-blur-
-  sm"><button>cerrar</button></form>
-    </dialog>   
+
+      <!-- Correo Institucional -->
+      <div class="form-control w-full mb-4">
+        <label class="label"
+          ><span class="label-text font-semibold text-slate-600"
+            >Correo Institucional</span
+          ></label
+        >
+        <input
+          formControlName="email"
+          type="email"
+          class="input input-bordered w-full bg-slate-50"
+        />
+      </div>
+
+      <!-- Rol -->
+      <div class="form-control w-full mb-6">
+        <label class="label"
+          ><span class="label-text font-semibold text-slate-600"
+            >Rol en el Sistema</span
+          ></label
+        >
+        <select
+          formControlName="role"
+          class="select select-bordered w-full bg-slate-50"
+        >
+          <option value="client">Funcionario Regular (Cliente)</option>
+          <option value="agent">Tecnico (Agente)</option>
+          <option value="admin">Administrador (Control Total)</option>
+        </select>
+      </div>
+
+      <!-- Botones -->
+      <div class="modal-action mt-2 flex gap-2 justify-end">
+        <button
+          type="button"
+          class="btn btn-ghost text-slate-500 font-semibold"
+          onclick="modalEditarUsuario.close()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary px-8 shadow-lg shadow-primary/30"
+          [disabled]="editarUsuarioForm.invalid"
+        >
+          Actualizar
+        </button>
+      </div>
+    </form>
+  </div>
+  <form
+    method="dialog"
+    class="modal-backdrop bg-slate-900/40 backdrop-blur- sm"
+  >
+    <button>cerrar</button>
+  </form>
+</dialog>

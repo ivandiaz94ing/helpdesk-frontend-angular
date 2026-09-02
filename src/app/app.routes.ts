@@ -6,27 +6,20 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.routes'),
-    canMatch: [
-      NotAuthenticatedGuard
-    ]
+    canMatch: [NotAuthenticatedGuard],
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.routes'),
-    canMatch: [
-      AuthenticatedGuard
-    ]
+    canMatch: [AuthenticatedGuard],
   },
   {
     path: '',
     redirectTo: 'dashboard/app-user-dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
-    path: "**",
-    redirectTo: 'auth/login'
-  }
-
-
-
+    path: '**',
+    redirectTo: 'auth/login',
+  },
 ];
