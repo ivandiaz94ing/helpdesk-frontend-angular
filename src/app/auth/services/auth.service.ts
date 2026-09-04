@@ -147,6 +147,16 @@ export class AuthService {
       );
   }
 
+  // Cambiar Contraseña
+  cambiarPassword(viejaContrasena: string, newPassword: string) {
+    return this.http
+      .patch(`${baseUrl}user/change-password`, {
+        oldPassword: viejaContrasena,
+        newPassword: newPassword,
+      });
+  }
+
+
   // ELIMINAR USUARIO DESDE EL PANEL ADMIN
   eliminarUsuarioAdmin(userId: string): Observable<boolean> {
     return this.http.delete(`${baseUrl}user/${userId}`).pipe(

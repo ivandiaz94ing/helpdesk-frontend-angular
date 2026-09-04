@@ -40,13 +40,27 @@ export class ProfileComponent {
     }
 
     // Aquí llamaremos al backend más adelante
-    console.log('Datos listos para enviar al backend:', {
-      currentPassword: this.currentPassword,
-      newPassword: this.newPassword,
-    });
+    this.authService.cambiarPassword(this.currentPassword, this.newPassword).subscribe({
+      next: (resp) => {
+        alert('¡Constraseña actualizada con éxito');
+        // Limpiamos los campos
+        this.currentPassword = '';
+        this.newPassword = '';
+        this.confirmPassword = '';
+      },
+      error: (err) => {
+        //Captura los errores que envia el backend
+        const mensajeError = err.error?.message || 'Error al cambiar la contraseña.';
 
-    alert('¡Validación exitosa! Falta conectar con NestJS.');
-  }
+        // Si es un arreglo (los errores de Regex), los mostramos juntos
+        if (Array.isArray(mensajeError)) {
+          alert(mensajeError.join('\n'));
+        } else {
+          alert(mensajeError);
+        }
+      }
+  });
+}
 
   volver() {
     const userRole = this.user()?.role;
