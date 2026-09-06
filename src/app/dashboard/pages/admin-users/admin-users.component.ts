@@ -106,4 +106,16 @@ export class AdminUsersComponent implements OnInit {
   }
 
   //Paso el nuevo parametro al servicio
+
+  resetearContrasena(userId: string, nombreUsuario: string) {
+        const confirmar = confirm(`¿Estás seguro de que deseas restablecer la contraseña del usuario
+  ${nombreUsuario}?\n\nLa nueva contraseña será: Telematica123.`);
+
+        if(confirmar) {
+          this.authService.resetPasswordAdmin(userId).subscribe({
+            next: () => alert('Contraseña restablecida con éxito a: Telematica123.'),
+            error: () => alert('Hubo un error restableciendo la contraseña.')
+          });
+        }
+      }   
 }

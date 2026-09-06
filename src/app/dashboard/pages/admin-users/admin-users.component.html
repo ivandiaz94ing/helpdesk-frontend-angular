@@ -121,9 +121,12 @@
 
                   <button
                     class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-error hover:bg-error/10"
-                    (click)="prepararEliminarUsuario(user.id, user.fullname)"
-                  >
+                    (click)="prepararEliminarUsuario(user.id, user.fullname)">
                     <i class="bx bx-trash text-lg"></i>
+                  </button>
+
+                  <button (click)="resetearContrasena(user.id, user.fullname)" class="btn btn-sm btn-circle btn-warning text-white" title="Restablecer Contraseña">
+                    <i class='bx bx-key'></i>
                   </button>
                 </div>
               </td>

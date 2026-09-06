@@ -21,6 +21,9 @@ export class Login {
   //     this.router.navigate(['/dashboard/app-user-dashboard']);
   //   }
   // }
+  olvideContrasena() {
+    alert('🔐 Protocolo de Seguridad:\n\nPor favor, comuníquese con el Oficial de Telemática (Administrador) de la Décima Brigada para el restablecimiento oficial de sus credenciales.');
+      }
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

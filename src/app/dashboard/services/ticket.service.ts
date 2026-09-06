@@ -10,6 +10,8 @@ import {
 
 const baseUrl =
   'https://helpdesk-backend-api-54750791481.southamerica-east1.run.app/';
+ const baseUrlLocal =
+   'http://127.0.0.1:3000/';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +30,20 @@ export class TicketService {
   }
 
   // 2. CREAR TICKET (POST /ticket)
-  crearTicket(datos: CreateTicketDTO): Observable<boolean> {
-    return this.http.post<Ticket>(`${baseUrl}ticket`, datos).pipe(
+  crearTicket(datos: CreateTicketDTO, imagenes: File[] = []): Observable<boolean> {
+    const formData = new FormData();
+    formData.append('title', datos.title);
+    formData.append('description', datos.description);
+    formData.append('priority', datos.priority);
+    formData.append('category', datos.category);
+    formData.append('equipoId', datos.equipoId);
+
+    // Empaquetamos las imagenes
+    imagenes.forEach(imagen => {
+      formData.append('images', imagen);
+    });
+
+    return this.http.post<Ticket>(`${baseUrl}ticket`, formData).pipe(
       map(() => true),
       catchError((err) => {
         console.error('Error al crear ticket:', err);

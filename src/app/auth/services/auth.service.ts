@@ -168,6 +168,11 @@ export class AuthService {
     );
   }
 
+  // RESTABLECER CONTRASEÑA (ADMIN)
+  resetPasswordAdmin(userId: string) {
+    return this.http.patch(`${baseUrl}user/reset-password/${userId}`, {});
+  }
+
   private handleAuthError(err: any) {
     this.clearSession();
     return of(false);

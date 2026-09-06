@@ -39,6 +39,7 @@ export class UserDashboardComponent implements OnInit {
   // Señales locales para guardar los datos de la base de datos
   public misTickets = signal<Ticket[]>([]);
   public misEquipos = signal<Equipo[]>([]);
+  public imagenesSeleccionadas: File[] = [];
 
   // Obtenemos las iniciales del usuario
   public userInitials = computed(() => {
@@ -58,6 +59,18 @@ export class UserDashboardComponent implements OnInit {
     this.equipoService
       .getEquipos()
       .subscribe((equipos) => this.misEquipos.set(equipos));
+  }
+
+  onImagenesSeleccionadas(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (inputElement.files) {
+      this.imagenesSeleccionadas = Array.from(inputElement.files);
+      if(this.imagenesSeleccionadas.length > 3) {
+        alert('Solo puedes subir un máximo de 3 imágenes.');
+        this.imagenesSeleccionadas = this.imagenesSeleccionadas.slice(0, 3);
+      }
+    }
   }
 
   crearTicket(
@@ -87,10 +100,11 @@ export class UserDashboardComponent implements OnInit {
         category: category as TicketCategory,
         priority: priority as TicketPriority,
         equipoId: equipoId,
-      })
+      }, this.imagenesSeleccionadas)
       .subscribe((exito) => {
         if (exito) {
           this.cargarDatos();
+          this.imagenesSeleccionadas = [];
         } else {
           alert('Ocurrió un error creando el ticket');
         }
