@@ -38,8 +38,12 @@ export class UserDashboardComponent implements OnInit {
 
   // Señales locales para guardar los datos de la base de datos
   public misTickets = signal<Ticket[]>([]);
+  public totalTickets = signal<number>(0);
+  public offsetActual = signal<number>(0);
+  public limit = 10;
   public misEquipos = signal<Equipo[]>([]);
   public imagenesSeleccionadas: File[] = [];
+
 
   // Obtenemos las iniciales del usuario
   public userInitials = computed(() => {
@@ -53,12 +57,31 @@ export class UserDashboardComponent implements OnInit {
 
   cargarDatos() {
     this.ticketService
-      .getTickets()
-      .subscribe((tickets) => this.misTickets.set(tickets));
+      .getTickets(this.limit, this.offsetActual())
+      .subscribe((respuesta) => {
+        this.misTickets.set(respuesta.data);
+        this.totalTickets.set(respuesta.meta.total);
+      });
 
     this.equipoService
       .getEquipos()
       .subscribe((equipos) => this.misEquipos.set(equipos));
+  }
+
+  siguientePagina() {
+    // Varificamos si aún hay más tickets por cargar
+    if (this.offsetActual() + this.limit < this.totalTickets()) {
+      this.offsetActual.set(this.offsetActual() + this.limit);
+      this.cargarDatos();
+    }
+  }
+
+  paginaAnterior() {
+    // Verificamos si no estamos en la primera página
+    if (this.offsetActual() - this.limit >= 0) {
+      this.offsetActual.set(this.offsetActual() - this.limit);
+      this.cargarDatos();
+    }
   }
 
   onImagenesSeleccionadas(event: Event) {

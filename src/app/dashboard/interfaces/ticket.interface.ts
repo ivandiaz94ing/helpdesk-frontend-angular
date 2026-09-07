@@ -73,3 +73,15 @@ export interface CreateTicketDTO {
   category: TicketCategory;
   equipoId: string; // ID del equipo al que pertenece el ticket
 }
+
+// En tus interfaces
+export interface PaginationMeta {
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: PaginationMeta;
+}

@@ -6,6 +6,7 @@ import {
   Ticket,
   CreateTicketDTO,
   Comment,
+  PaginatedResponse,
 } from '../interfaces/ticket.interface';
 
 const baseUrl =
@@ -20,11 +21,14 @@ export class TicketService {
   private http = inject(HttpClient);
 
   // 1. OBTENER TODOS LOS TICKETS (GET /ticket)
-  getTickets(): Observable<Ticket[]> {
-    return this.http.get<Ticket[]>(`${baseUrl}ticket`).pipe(
+  getTickets(limit: number = 10, offset: number = 0): Observable<PaginatedResponse<Ticket>> {
+    return this.http.get<PaginatedResponse<Ticket>>(`${baseUrl}ticket?limit=${limit}&offset=${offset}`).pipe(
       catchError((err) => {
         console.error('Error al cargar tickets:', err);
-        return of([]);
+        return of<PaginatedResponse<Ticket>>({
+          data: [],
+          meta: { total: 0, limit: 0, offset: 0 }
+        });
       }),
     );
   }
