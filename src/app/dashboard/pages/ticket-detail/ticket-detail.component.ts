@@ -50,7 +50,7 @@ export class TicketDetailComponent implements OnInit {
     if (this.ticketId) {
       // Temporalmente traemos todos y filtramos, hasta que en NestJS crees el GET/ticket/:id
       this.ticketService.getTickets().subscribe((tickets) => {
-        const t = tickets.find((x) => x.id === this.ticketId);
+        const t = tickets.data.find((x) => x.id === this.ticketId);
         if (t) this.ticket.set(t);
       });
     }

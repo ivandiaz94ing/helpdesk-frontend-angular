@@ -249,6 +249,38 @@
               </div>
             }
           </div>
+           <!-- Controles de Paginación -->
+    <div class="flex justify-between items-center mt-6 p-4 bg-base-100 rounded-xl shadow-sm border
+  border-base-200">
+
+      <!-- Texto informativo: "Mostrando 1 a 10 de 50 tickets" -->
+      <div class="text-sm font-medium text-slate-500">
+        Mostrando
+        <span class="text-slate-800">{{ totalTickets() === 0 ? 0 : offsetActual() + 1 }}</span>
+        a
+        <span class="text-slate-800">{{ (offsetActual() + limit) > totalTickets() ? totalTickets() :
+  (offsetActual() + limit) }}</span>
+        de
+        <span class="text-primary font-bold">{{ totalTickets() }}</span> tickets
+      </div>
+
+      <!-- Botones Anterior y Siguiente -->
+      <div class="join">
+        <button
+          class="join-item btn btn-sm bg-base-200 hover:bg-primary hover:text-white transition-colors"
+          (click)="paginaAnterior()"
+          [disabled]="offsetActual() === 0">
+          <i class='bx bx-chevron-left text-lg'></i> Anterior
+        </button>
+
+        <button
+          class="join-item btn btn-sm bg-base-200 hover:bg-primary hover:text-white transition-colors"
+          (click)="siguientePagina()"
+          [disabled]="(offsetActual() + limit) >= totalTickets()">
+          Siguiente <i class='bx bx-chevron-right text-lg'></i>
+        </button>
+      </div>
+    </div>    
         }
       </div>
     </main>

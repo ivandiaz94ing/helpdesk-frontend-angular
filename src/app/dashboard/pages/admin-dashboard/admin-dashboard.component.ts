@@ -48,7 +48,7 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit() {
     // Al iniciar, pedimos los tickets reales
     this.ticketService.getTickets().subscribe((tickets) => {
-      this.misTickets.set(tickets);
+      this.misTickets.set(tickets.data);
     });
   }
 

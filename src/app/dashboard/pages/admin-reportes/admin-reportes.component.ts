@@ -110,7 +110,7 @@ export class AdminReportesComponent implements OnInit {
 
   ngOnInit(): void {
     this.ticketService.getTickets().subscribe((data) => {
-      this.tickets.set(data);
+      this.tickets.set(data.data);
     });
   }
 

@@ -54,7 +54,7 @@ export class AdminTickets implements OnInit {
 
   cargarTickets() {
     this.ticketService.getTickets().subscribe((ticketsBack) => {
-      this.ticketsOriginales.set(ticketsBack);
+      this.ticketsOriginales.set(ticketsBack.data);
     });
   }
 
