@@ -17,11 +17,12 @@ import {
   TicketPriority,
 } from '../../interfaces/ticket.interface';
 import { EquipoService } from '../../services/equipo.service';
+import { PaginationComponent } from "../../../shared/pagination/pagination.component";
 
 @Component({
   selector: 'user-dashboard',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, CommonModule],
+  imports: [RouterOutlet, RouterLink, CommonModule, PaginationComponent],
   templateUrl: './user-dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,8 +42,10 @@ export class UserDashboardComponent implements OnInit {
   public totalTickets = signal<number>(0);
   public offsetActual = signal<number>(0);
   public limit = 10;
+
   public misEquipos = signal<Equipo[]>([]);
   public imagenesSeleccionadas: File[] = [];
+
 
 
   // Obtenemos las iniciales del usuario
@@ -68,21 +71,10 @@ export class UserDashboardComponent implements OnInit {
       .subscribe((equipos) => this.misEquipos.set(equipos));
   }
 
-  siguientePagina() {
-    // Varificamos si aún hay más tickets por cargar
-    if (this.offsetActual() + this.limit < this.totalTickets()) {
-      this.offsetActual.set(this.offsetActual() + this.limit);
+  cambiarPagina(nuevoOffset: number) {
+      this.offsetActual.set(nuevoOffset);
       this.cargarDatos();
     }
-  }
-
-  paginaAnterior() {
-    // Verificamos si no estamos en la primera página
-    if (this.offsetActual() - this.limit >= 0) {
-      this.offsetActual.set(this.offsetActual() - this.limit);
-      this.cargarDatos();
-    }
-  }
 
   onImagenesSeleccionadas(event: Event) {
     const inputElement = event.target as HTMLInputElement;

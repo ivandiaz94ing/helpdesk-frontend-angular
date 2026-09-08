@@ -1,0 +1,14 @@
+        <div class="flex justify-center mt-8 mb-4">
+          <div class="join shadow-sm">
+            @for (pagina of paginas(); track pagina) {
+              <button
+                class="join-item btn btn-sm transition-colors"
+                [class.btn-active]="offset() === (pagina - 1) * limit()"
+                [class.bg-primary]="offset() === (pagina - 1) * limit()"
+                [class.text-white]="offset() === (pagina - 1) * limit()"
+                (click)="cambiarPagina(pagina)">
+                {{ pagina }}
+              </button>
+            }
+          </div>
+        </div> 
