@@ -15,11 +15,12 @@ import {
 } from '../../interfaces/ticket.interface';
 import { RouterLink } from '@angular/router';
 import { ModalConfirmacionComponent } from '../../../shared/components/modal-confirmacion/modal-confirmacion.component';
+import { PaginationComponent } from "../../../shared/pagination/pagination.component";
 
 @Component({
   selector: 'app-admin-tickets',
   standalone: true,
-  imports: [CommonModule, RouterLink, ModalConfirmacionComponent],
+  imports: [CommonModule, RouterLink, ModalConfirmacionComponent, PaginationComponent],
   templateUrl: './admin-tickets.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,6 +30,10 @@ export class AdminTickets implements OnInit {
   public ticketAEliminar = signal<string | null>(null);
   // Inyectamos el servicio central donde viven los tickets
   public ticketService = inject(TicketService);
+
+  public totalTickets = signal<number>(0);
+  public offsetActual = signal<number>(0);
+  public limit = 10;
 
   public terminoBusqueda = signal('');
   public ticketsOriginales = signal<Ticket[]>([]);
@@ -53,10 +58,16 @@ export class AdminTickets implements OnInit {
   }
 
   cargarTickets() {
-    this.ticketService.getTickets().subscribe((ticketsBack) => {
+    this.ticketService.getTickets(this.limit, this.offsetActual()).subscribe((ticketsBack) => {
       this.ticketsOriginales.set(ticketsBack.data);
+      this.totalTickets.set(ticketsBack.meta.total);
     });
   }
+
+  cambiarPagina(nuevoOffset: number) {
+  this.offsetActual.set(nuevoOffset); // Actualizamos
+  this.cargarTickets(); // Pedimos los nuevos tickets
+}
 
   buscar(texto: string) {
     this.terminoBusqueda.set(texto);

@@ -131,7 +131,13 @@
         }
       </tbody>
     </table>
-    
+
+      <app-pagination
+      [total]="totalTickets()"
+      [offset]="offsetActual()"
+      [limit]="limit"
+      (onPageChange)="cambiarPagina($event)"/>
+
 
     @if (ticketsFiltrados().length === 0) {
       <div class="text-center py-20">
