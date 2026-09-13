@@ -116,7 +116,12 @@
         </h4>
         <div class="w-full max-w-[300px]">
           <!-- Etiqueta mágica de ng2-charts -->
-          <canvas baseChart [data]="pieChartData()" type="pie"></canvas>
+          <canvas baseChart
+          type="pie"
+          [data]="pieChartData()"
+          [options]="pieChartOptions"
+          [plugins]="pieChartPlugins"
+          ></canvas>
         </div>
       </div>
 

@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { Ticket } from '../../interfaces/ticket.interface';
 import { TicketService } from '../../services/ticket.service';
 import { BaseChartDirective } from 'ng2-charts';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 @Component({
   selector: 'app-admin-reportes',
@@ -109,7 +110,7 @@ export class AdminReportesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ticketService.getTickets().subscribe((data) => {
+    this.ticketService.getTickets(1000, 0).subscribe((data) => {
       this.tickets.set(data.data);
     });
   }
@@ -160,4 +161,29 @@ export class AdminReportesComponent implements OnInit {
     link.click();
     document.body.removeChild(link);
   }
+
+  // 1. Configuramos cómo se van a ver las etiquetas
+      public pieChartOptions = {
+        responsive: true,
+        plugins: {
+          datalabels: {
+            color: '#ffffff', // Letras blancas
+            font: { weight: 'bold' as const, size: 14 },
+            // Esta funcioncita convierte el número a porcentaje
+            formatter: (value: number, ctx: any) => {
+              if (value === 0) return ''; // Si la tajada está en cero, no mostramos nada
+
+              let sum = 0;
+              let dataArr = ctx.chart.data.datasets[0].data;
+              dataArr.map((data: number) => { sum += data; });
+
+              let percentage = ((value * 100) / sum).toFixed(1) + '%';
+              return percentage;
+            }
+          }
+        }
+      };
+      
+   // 2. Le decimos a la gráfica que cargue este plugin
+      public pieChartPlugins = [ChartDataLabels];
 }
