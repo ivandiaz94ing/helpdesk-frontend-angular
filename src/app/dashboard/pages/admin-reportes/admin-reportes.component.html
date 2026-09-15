@@ -25,23 +25,34 @@
   <!-- Contenedor donde luego irán nuestras Tarjetas y Gráficas -->
   <div class="p-8">
     <!-- Filtro de Tiempo -->
-    <div class="flex justify-end mb-6">
-      <div class="join shadow-sm">
-        <div
-          class="join-item flex items-center px-4 bg-slate-100 border border-slate-200 text-slate-500 font-semibold text-sm"
-        >
-          <i class="bx bx-calendar mr-2"></i> Periodo:
-        </div>
-        <select
-          class="select select-bordered join-item focus:outline-none bg-white"
-          (change)="cambiarFiltro($event)"
-        >
-          <option value="ALL">Todo el Historial</option>
-          <option value="CURRENT_MONTH">Este Mes</option>
-          <option value="LAST_MONTH">Mes Pasado</option>
-        </select>
-      </div>
-    </div>
+     <!-- Rango de Fechas (Desde - Hasta) -->
+        <div class="flex justify-end mb-6">
+          <div class="join shadow-sm">
+            <!-- Etiqueta Desde -->
+            <div class="join-item flex items-center px-4 bg-slate-100 border border-slate-200 text-slate-
+  500 font-semibold text-sm">
+              <i class="bx bx-calendar mr-2"></i> Desde:
+            </div>
+            <!-- Calendario Inicio -->
+            <input
+              type="date"
+              class="input input-bordered join-item focus:outline-none bg-white"
+              (change)="setFechaInicio($event)"
+            />
+
+            <!-- Etiqueta Hasta -->
+            <div class="join-item flex items-center px-4 bg-slate-100 border-y border-slate-200 text-
+  slate-500 font-semibold text-sm">
+              Hasta:
+            </div>
+            <!-- Calendario Fin -->
+            <input
+              type="date"
+              class="input input-bordered join-item focus:outline-none bg-white"
+              (change)="setFechaFin($event)"
+            />
+          </div>
+        </div>  
 
     <!-- Tarjetas de Resumen -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -140,7 +151,7 @@
             type="bar"
             [data]="barChartData()"
             [options]="barChartOptions"
-            [plugins]="barChartPlugins"> 
+            [plugins]="barChartPlugins">
           </canvas>
         </div>
       </div>

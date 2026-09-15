@@ -11,6 +11,8 @@ import { Ticket } from '../../interfaces/ticket.interface';
 import { TicketService } from '../../services/ticket.service';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { list } from 'postcss';
+import { input } from '@angular/core';
 
 @Component({
   selector: 'app-admin-reportes',
@@ -23,36 +25,39 @@ export class AdminReportesComponent implements OnInit {
   private ticketService = inject(TicketService);
 
   public tickets = signal<Ticket[]>([]);
-  public filtroTiempo = signal<'ALL' | 'CURRENT_MONTH' | 'LAST_MONTH'>('ALL');
+
+  public fechaInicio = signal<string>('');
+  public fechaFin = signal<string>('');
 
   public ticketsFiltrados = computed(() => {
-    const filtro = this.filtroTiempo();
-    const lista = this.tickets();
+    const inicio = this.fechaInicio();
+    const fin = this.fechaFin();
+    let lista = this.tickets();
 
-    if (filtro === 'ALL') return lista;
+    if(inicio){
+      const fechaDesde = new Date(inicio + 'T00:00:00');
+      lista = lista.filter((t) => new Date(t.createdAt) >= fechaDesde);
+    }
 
-    const hoy = new Date();
-    const mesActual = hoy.getMonth();
-    const añoActual = hoy.getFullYear();
-
-    return lista.filter((ticket) => {
-      const fecha = new Date(ticket.createdAt);
-      if (filtro === 'CURRENT_MONTH') {
-        return (
-          fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual
-        );
-      }
-      if (filtro === 'LAST_MONTH') {
-        const mesAnterior = mesActual === 0 ? 11 : mesActual - 1;
-        const añoAnterior = mesActual === 0 ? añoActual - 1 : añoActual;
-        return (
-          fecha.getMonth() === mesAnterior &&
-          fecha.getFullYear() === añoAnterior
-        );
-      }
-      return true;
-    });
+    if (fin) {
+      const fechaHasta = new Date(fin + 'T23:59:59');
+      lista = lista.filter((t) => new Date(t.createdAt) <= fechaHasta);
+    }
+    return lista;
   });
+
+  //Funciones para atrapar los cambios en los calendarios
+  setFechaInicio(event: Event){
+    const input = event.target as HTMLInputElement;
+    this.fechaInicio.set(input.value);
+  }
+
+  setFechaFin(event: Event){
+    const input = event.target as HTMLInputElement;
+    this.fechaFin.set(input.value);
+  }
+
+
 
   public totalTickets = computed(() => this.ticketsFiltrados().length);
 
@@ -104,10 +109,7 @@ export class AdminReportesComponent implements OnInit {
     };
   });
 
-  cambiarFiltro(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    this.filtroTiempo.set(selectElement.value as any);
-  }
+
 
   ngOnInit(): void {
     this.ticketService.getTickets(1000, 0).subscribe((data) => {
