@@ -136,7 +136,12 @@
         </h4>
         <div class="w-full">
           <!-- Etiqueta mágica de ng2-charts -->
-          <canvas baseChart [data]="barChartData()" type="bar"></canvas>
+          <canvas baseChart
+            type="bar"
+            [data]="barChartData()"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"> 
+          </canvas>
         </div>
       </div>
     </div>

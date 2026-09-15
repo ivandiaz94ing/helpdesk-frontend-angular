@@ -183,7 +183,24 @@ export class AdminReportesComponent implements OnInit {
           }
         }
       };
-      
+
    // 2. Le decimos a la gráfica que cargue este plugin
       public pieChartPlugins = [ChartDataLabels];
+
+  public barChartOptions = {
+        responsive: true,
+        plugins: {
+          datalabels: {
+            color: '#ffffff', // Letras blancas (o pon '#000000' si tus barras son muy claras)
+            font: { weight: 'bold' as const, size: 14 },
+            // En las barras, solo mostramos el valor real, no el porcentaje
+            formatter: (value: number) => {
+              return value > 0 ? value : ''; // Muestra el número si es mayor a cero
+            }
+          }
+        }
+      };
+
+    // Podemos usar el mismo arreglo de plugins que creaste para el pastel
+    public barChartPlugins = [ChartDataLabels];
 }
