@@ -35,6 +35,7 @@ export class AdminUsersComponent implements OnInit {
   public usuarioAEditar = signal<User | null>(null);
   // Señal para guardar el texto que el usuario escribe en el buscador
   public terminoBusqueda = signal('');
+  public filtroRol = signal('TODOS');
 
   // La lista original de todos los usuarios (le cambiamos el nombre a usuariosOriginales)
   public usuariosOriginales = signal<User[]>([]);
@@ -42,17 +43,21 @@ export class AdminUsersComponent implements OnInit {
   // LA MAGIA: Una señal computada que se actualiza sola cuando escribes
   public usuariosFiltrados = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase();
-    const lista = this.usuariosOriginales();
+    const rol = this.filtroRol();
+    let lista = this.usuariosOriginales();
 
     // Si no has escrito nada, mostramos todos
-    if (!termino) return lista;
-
-    // Si escribiste algo, filtramos por nombre o correo
-    return lista.filter(
-      (user) =>
-        user.fullname.toLowerCase().includes(termino) ||
-        user.email.toLowerCase().includes(termino),
+    if (termino) {
+      lista = lista.filter((usuario) =>
+      usuario.fullname.toLowerCase().includes(termino) ||
+      usuario.email.toLowerCase().includes(termino)
     );
+  }
+  if(rol !== 'TODOS') {
+    lista = lista.filter((usuario) => usuario.role === rol);
+  }
+  return lista;
+
   });
 
   abrirModalNuevo() {
@@ -117,5 +122,10 @@ export class AdminUsersComponent implements OnInit {
             error: () => alert('Hubo un error restableciendo la contraseña.')
           });
         }
-      }   
+      }
+
+  cambiarFiltroRol(event:Event){
+    const select = event.target as HTMLSelectElement;
+    this.filtroRol.set(select.value);
+  }
 }

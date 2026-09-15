@@ -19,6 +19,13 @@
           class="input input-bordered join-item w-full bg-white focus:outline-primary"
           placeholder="Buscar usuario..."
         />
+           <!-- Filtro de Rol -->
+    <select class="select select-bordered join-item max-w-xs bg-white focus:outline-primary" (change)="cambiarFiltroRol($event)">
+      <option value="TODOS">Todos los roles</option>
+      <option value="admin">Administradores</option>
+      <option value="agent">Agentes / Técnicos</option>
+      <option value="client">Clientes</option>
+    </select>
 
         <button class="btn btn-square join-item bg-slate-100 border-slate-200">
           <i class="bx bx-search text-xl text-slate-500"></i>
@@ -33,7 +40,7 @@
       </button>
     </div>
   </div>
-
+max-w-fit
   <!-- Contenedor de la Tabla -->
   <div
     class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
